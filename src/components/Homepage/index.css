@@ -1,0 +1,30 @@
+.logo {
+  float: left;
+  width: 120px;
+  height: 31px;
+  margin: 16px 24px 16px 0;
+  background: rgba(255, 255, 255, 0.3);
+}
+.header {
+  color: rgba(255, 255, 255, 0.681);
+  background: #001529;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+}
+.user-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* width: 120px; */
+}
+.ant-row-rtl #components-layout-demo-top-side-2 .logo {
+  float: right;
+  margin: 16px 0 16px 24px;
+}
+
+.site-layout-background {
+  background: #fff;
+  /* height: 90vh; */
+}

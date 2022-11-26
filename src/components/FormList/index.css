@@ -1,0 +1,16 @@
+.title {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 36px;
+}
+.list-form {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.item {
+  font-weight: 600;
+  width: 30%;
+  margin: 20px 20px;
+}
