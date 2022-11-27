@@ -1,10 +1,13 @@
 import { Button, Layout, Menu } from "antd";
 import React from "react";
+import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { LogoutOutlined, FileWordOutlined } from "@ant-design/icons/lib/icons";
 import "./index.css";
 import FormList from "../FormList";
+import { mockData } from "../../mock/data";
+import Search from "../FormList/Search";
 const { Content, Sider } = Layout;
 
 // const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
@@ -81,6 +84,22 @@ const Homepage = () => {
   const { logout, currentUser } = useAuth();
   console.log(currentUser.email);
   const history = useHistory();
+  const [query, putQuery] = useState('');
+  const [forms, putForms] = useState(mockData)
+
+  const getData = () => {
+    let formList = forms;
+    if(query){
+      formList = forms.filter(
+        form => form.title.toLowerCase().match(query.toLowerCase())
+      );
+    }
+    return {displayList: formList};
+  }
+
+  const handleSearch = query => {
+    putQuery(query);
+  };
 
   const handleLogout = async () => {
     try {
@@ -91,6 +110,9 @@ const Homepage = () => {
       // setError("Failed to log out");
     }
   };
+
+  const {displayList} = getData();
+
   return (
     <>
       <Layout>
@@ -135,7 +157,11 @@ const Homepage = () => {
                 minHeight: 280,
               }}
             >
-              <FormList />
+              <Search 
+                query={query}
+                onchange={handleSearch}
+              />
+              <FormList data={displayList}/>
             </Content>
           </Layout>
         </Layout>
