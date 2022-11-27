@@ -21,6 +21,18 @@ export const mockData = [
   },
   {
     src: "https://dvdn247.net/wp-content/uploads/2019/11/11111.jpg",
-    title: "Mẫu đơn xin nghỉ việc 5",
+    title: "giay_chung_nhan_sinh_vien",
   },
+  {
+    src: "https://dvdn247.net/wp-content/uploads/2019/11/11111.jpg",
+    title: "chung_nhan_sinh_vien_5_tot",
+  },
+  {
+    src: "https://dvdn247.net/wp-content/uploads/2019/11/11111.jpg",
+    title: "chung_nhan_sinh_vien_ngheo_vuot_kho",
+  },
+  {
+    src: "https://dvdn247.net/wp-content/uploads/2019/11/11111.jpg",
+    title: "chung_nhan_sinh_vien_1",
+  }
 ];

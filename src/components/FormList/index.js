@@ -1,13 +1,14 @@
 import { Image } from "antd";
 import React from "react";
-import { mockData } from "../../mock/data";
+// import { mockData } from "../../mock/data";
 import "./index.css";
-const FormList = () => {
+
+const FormList = ({data}) => {
   return (
     <div>
-      <div className="title">Mẫu đơn xin nghỉ việc</div>
+      {/* <div className="title">Mẫu đơn xin nghỉ việc</div> */}
       <div className="list-form">
-        {mockData.map((item, index) => (
+        {data.map((item, index) => (
           <figure className="item" key={index}>
             <Image
               style={{
