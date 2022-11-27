@@ -34,5 +34,57 @@ export const mockData = [
   {
     src: "https://dvdn247.net/wp-content/uploads/2019/11/11111.jpg",
     title: "chung_nhan_sinh_vien_1",
-  }
+  },
+  {
+    src: "https://dvdn247.net/wp-content/uploads/2019/11/11111.jpg",
+    title: "chung_nhan_sinh_vien_1",
+  },
+  {
+    src: "https://dvdn247.net/wp-content/uploads/2019/11/11111.jpg",
+    title: "chung_nhan_sinh_vien_1",
+  },
+  {
+    src: "https://dvdn247.net/wp-content/uploads/2019/11/11111.jpg",
+    title: "chung_nhan_sinh_vien_1",
+  },
+  {
+    src: "https://dvdn247.net/wp-content/uploads/2019/11/11111.jpg",
+    title: "chung_nhan_sinh_vien_1",
+  },
+  {
+    src: "https://dvdn247.net/wp-content/uploads/2019/11/11111.jpg",
+    title: "chung_nhan_sinh_vien_1",
+  },
+  {
+    src: "https://dvdn247.net/wp-content/uploads/2019/11/11111.jpg",
+    title: "chung_nhan_sinh_vien_1",
+  },
+  {
+    src: "https://dvdn247.net/wp-content/uploads/2019/11/11111.jpg",
+    title: "chung_nhan_sinh_vien_1",
+  },
+  {
+    src: "https://dvdn247.net/wp-content/uploads/2019/11/11111.jpg",
+    title: "chung_nhan_sinh_vien_1",
+  },
+  {
+    src: "https://dvdn247.net/wp-content/uploads/2019/11/11111.jpg",
+    title: "chung_nhan_sinh_vien_1",
+  },
+  {
+    src: "https://dvdn247.net/wp-content/uploads/2019/11/11111.jpg",
+    title: "chung_nhan_sinh_vien_1",
+  },
+  {
+    src: "https://dvdn247.net/wp-content/uploads/2019/11/11111.jpg",
+    title: "chung_nhan_sinh_vien_1",
+  },
+  {
+    src: "https://dvdn247.net/wp-content/uploads/2019/11/11111.jpg",
+    title: "chung_nhan_sinh_vien_1",
+  },
+  {
+    src: "https://dvdn247.net/wp-content/uploads/2019/11/11111.jpg",
+    title: "chung_nhan_sinh_vien_1",
+  },
 ];

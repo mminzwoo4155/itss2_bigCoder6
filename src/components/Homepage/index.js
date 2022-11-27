@@ -1,5 +1,5 @@
-import { Button, Layout, Menu } from "antd";
-import React from "react";
+import { Button, Layout, Menu, Pagination } from "antd";
+import React, { useMemo } from "react";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
@@ -8,6 +8,7 @@ import "./index.css";
 import FormList from "../FormList";
 import { mockData } from "../../mock/data";
 import Search from "../FormList/Search";
+import useFormStorage from "../../hook/formStorage";
 const { Content, Sider } = Layout;
 
 // const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
@@ -27,65 +28,71 @@ const { Content, Sider } = Layout;
 //     };
 //   }
 // );
-const menuItem = [
-  {
-    key: "sub1",
-    icon: <FileWordOutlined />,
-    label: "For Company",
-    children: [
-      {
-        key: 1,
-        label: `Mẫu đơn xin nghỉ việc`,
-      },
-      {
-        key: 2,
-        label: `Mẫu đơn xin nghỉ phép`,
-      },
-      {
-        key: 3,
-        label: `Mẫu đơn xin tăng lương`,
-      },
-      {
-        key: 4,
-        label: `Mẫu đơn xin việc`,
-      },
-    ],
-  },
-  {
-    key: "sub2",
-    icon: <FileWordOutlined />,
-    label: "For School",
-    children: [
-      {
-        key: 5,
-        label: `Mẫu đơn xin nghỉ học`,
-      },
-      {
-        key: 6,
-        label: `Mẫu đơn xin tạm hoãn nghĩa vụ`,
-      },
-      {
-        key: 7,
-        label: `Giấy xác nhận sinh viên`,
-      },
-      {
-        key: 8,
-        label: `Mẫu đơn xin miễn giảm học phí`,
-      },
-      {
-        key: 9,
-        label: `Mẫu đơn xác nhận hộ nghèo`,
-      },
-    ],
-  },
-];
+// const menuItem = [
+//   {
+//     key: "sub1",
+//     icon: <FileWordOutlined />,
+//     label: "For Company",
+//     children: [
+//       {
+//         key: 1,
+//         label: `Mẫu đơn xin nghỉ việc`,
+//       },
+//       {
+//         key: 2,
+//         label: `Mẫu đơn xin nghỉ phép`,
+//       },
+//       {
+//         key: 3,
+//         label: `Mẫu đơn xin tăng lương`,
+//       },
+//       {
+//         key: 4,
+//         label: `Mẫu đơn xin việc`,
+//       },
+//     ],
+//   },
+//   {
+//     key: "sub2",
+//     icon: <FileWordOutlined />,
+//     label: "For School",
+//     children: [
+//       {
+//         key: 5,
+//         label: `Mẫu đơn xin nghỉ học`,
+//       },
+//       {
+//         key: 6,
+//         label: `Mẫu đơn xin tạm hoãn nghĩa vụ`,
+//       },
+//       {
+//         key: 7,
+//         label: `Giấy xác nhận sinh viên`,
+//       },
+//       {
+//         key: 8,
+//         label: `Mẫu đơn xin miễn giảm học phí`,
+//       },
+//       {
+//         key: 9,
+//         label: `Mẫu đơn xác nhận hộ nghèo`,
+//       },
+//     ],
+//   },
+// ];
+
+const PageSize = 10;
 
 const Homepage = () => {
   const { logout, currentUser } = useAuth();
-  console.log(currentUser.email);
   const history = useHistory();
   const [query, putQuery] = useState("");
+
+  // Un-comment this to use mock-data
   const [forms, putForms] = useState(mockData);
+
+  // Un-comment this to use data from firestore
+  // const [forms] = useFormStorage();
 
   const getData = () => {
     let formList = forms;
@@ -96,6 +103,15 @@ const Homepage = () => {
     }
     return { displayList: formList };
   };
+
+  const { displayList } = getData();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const currentDisplayPage = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return displayList.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage, displayList]);
 
   const handleSearch = (query) => {
     putQuery(query);
@@ -111,7 +127,10 @@ const Homepage = () => {
     }
   };
 
-  const { displayList } = getData();
+  const onChange = (page, pageSize) => {
+    console.log(page, pageSize)
+    setCurrentPage(page)
+  }
 
   return (
     <>
@@ -132,7 +151,7 @@ const Homepage = () => {
           </div>
         </div>
         <Layout>
-          <Sider width={300} className="site-layout-background">
+          {/* <Sider width={300} className="site-layout-background">
             <Menu
               mode="inline"
               // defaultSelectedKeys={["sub1"]}
@@ -143,7 +162,7 @@ const Homepage = () => {
               }}
               items={menuItem}
             />
-          </Sider>
+          </Sider> */}
           <Layout
             style={{
               padding: "0 24px 24px",
@@ -159,7 +178,13 @@ const Homepage = () => {
             >
               <div className="title">Mẫu đơn xin nghỉ việc</div>
               <Search query={query} onchange={handleSearch} />
-              <FormList data={displayList} />
+              <FormList data={currentDisplayPage} />
+              <Pagination 
+                current={currentPage}
+                onChange={onChange}
+                total={displayList.length}
+                pageSize={PageSize}
+              />
             </Content>
           </Layout>
         </Layout>
