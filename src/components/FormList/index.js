@@ -3,10 +3,9 @@ import React from "react";
 // import { mockData } from "../../mock/data";
 import "./index.css";
 
-const FormList = ({data}) => {
+const FormList = ({ data }) => {
   return (
     <div>
-      {/* <div className="title">Mẫu đơn xin nghỉ việc</div> */}
       <div className="list-form">
         {data.map((item, index) => (
           <figure className="item" key={index}>

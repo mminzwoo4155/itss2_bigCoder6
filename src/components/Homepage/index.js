@@ -84,20 +84,20 @@ const Homepage = () => {
   const { logout, currentUser } = useAuth();
   console.log(currentUser.email);
   const history = useHistory();
-  const [query, putQuery] = useState('');
-  const [forms, putForms] = useState(mockData)
+  const [query, putQuery] = useState("");
+  const [forms, putForms] = useState(mockData);
 
   const getData = () => {
     let formList = forms;
-    if(query){
-      formList = forms.filter(
-        form => form.title.toLowerCase().match(query.toLowerCase())
+    if (query) {
+      formList = forms.filter((form) =>
+        form.title.toLowerCase().match(query.toLowerCase())
       );
     }
-    return {displayList: formList};
-  }
+    return { displayList: formList };
+  };
 
-  const handleSearch = query => {
+  const handleSearch = (query) => {
     putQuery(query);
   };
 
@@ -111,7 +111,7 @@ const Homepage = () => {
     }
   };
 
-  const {displayList} = getData();
+  const { displayList } = getData();
 
   return (
     <>
@@ -157,11 +157,9 @@ const Homepage = () => {
                 minHeight: 280,
               }}
             >
-              <Search 
-                query={query}
-                onchange={handleSearch}
-              />
-              <FormList data={displayList}/>
+              <div className="title">Mẫu đơn xin nghỉ việc</div>
+              <Search query={query} onchange={handleSearch} />
+              <FormList data={displayList} />
             </Content>
           </Layout>
         </Layout>
