@@ -8,6 +8,7 @@ import "./index.css";
 import FormList from "../FormList";
 import { mockData } from "../../mock/data";
 import Search from "../FormList/Search";
+import useFormStorage from "../../hook/formStorage";
 const { Content, Sider } = Layout;
 
 // const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
@@ -85,7 +86,8 @@ const Homepage = () => {
   console.log(currentUser.email);
   const history = useHistory();
   const [query, putQuery] = useState("");
-  const [forms, putForms] = useState(mockData);
+  // const [forms, putForms] = useState(mockData);
+  const [forms] = useFormStorage();
 
   const getData = () => {
     let formList = forms;
