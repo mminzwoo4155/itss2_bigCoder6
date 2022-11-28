@@ -9,7 +9,13 @@ const Signup = () => {
   const { signup } = useAuth();
   const history = useHistory();
   const handleSubmit = async (val) => {
-    console.log(val);
+    if((/\d/.test(val.password) || /[a-zA-Z]/.test(val.password)) === false){
+      notification.error({
+        message: "Registry Error",
+        description: "Password must contains lowercase letter, uppercase letter, numbers"
+      })
+      return;
+    }
     if(val.cfpassword === val.password){
       try {
         await signup(val.email, val.password);
@@ -18,7 +24,7 @@ const Signup = () => {
         notification.error({
           message: "Registry Error",
           description: e.message
-        })
+        });
       }
     } else {
       notification.error({
