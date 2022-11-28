@@ -1,7 +1,7 @@
 import React from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { Link, useHistory } from "react-router-dom";
-import { Form, Button, Input, Typography, Row } from "antd";
+import { Form, Button, Input, Typography, Row, notification } from "antd";
 import "./index.css";
 const { Title } = Typography;
 const Signup = () => {
@@ -10,13 +10,24 @@ const Signup = () => {
   const history = useHistory();
   const handleSubmit = async (val) => {
     console.log(val);
-    try {
-      await signup(val.email, val.password);
-      history.push("/");
-    } catch {
-      console.log("err");
+    if(val.cfpassword === val.password){
+      try {
+        await signup(val.email, val.password);
+        history.push("/");
+      } catch(e) {
+        notification.error({
+          message: "Registry Error",
+          description: e.message
+        })
+      }
+    } else {
+      notification.error({
+        message: "Password Error",
+        description: "Password and Confirmed Password not matched"
+      })
     }
   };
+
   return (
     <div className="loginForm">
       <Form
@@ -51,7 +62,7 @@ const Signup = () => {
             },
           ]}
         >
-          <Input.Password />
+          <Input.Password minLength={8} />
         </Form.Item>
         <Form.Item
           label="Confirm Password"
@@ -63,7 +74,7 @@ const Signup = () => {
             },
           ]}
         >
-          <Input.Password />
+          <Input.Password minLength={8}/>
         </Form.Item>
         <Row justify="center">
           <Button
