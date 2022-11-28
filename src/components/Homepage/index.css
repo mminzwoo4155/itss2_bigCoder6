@@ -34,3 +34,7 @@
   line-height: 36px;
   margin-bottom: 20px;
 }
+.pagination {
+  margin: 40px 0;
+  justify-content: end !important;
+}

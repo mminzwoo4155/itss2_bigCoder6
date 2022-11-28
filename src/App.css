@@ -40,3 +40,6 @@ body {
    */
   padding: 24px !important;
 }
+.ant-image {
+  margin: auto !important;
+}
