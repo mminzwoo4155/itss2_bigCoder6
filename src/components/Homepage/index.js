@@ -1,7 +1,7 @@
 import { Button, Layout, Menu } from "antd";
 import React from "react";
 // import { useState } from "react";
-import { Route, Switch, useHistory } from "react-router-dom";
+import { Route, Switch, useHistory, Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { LogoutOutlined, FileWordOutlined } from "@ant-design/icons/lib/icons";
 import "./index.css";
@@ -66,6 +66,8 @@ const Homepage = () => {
   const { logout, currentUser } = useAuth();
   const history = useHistory();
 
+  console.log(currentUser.uid);
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -82,7 +84,11 @@ const Homepage = () => {
         <div className="header">
           <div className="logo" />
           <div className="user-info">
-            <div>{currentUser.email}</div>
+            <div>
+              <Link to={`/profile/${currentUser.uid}`}>
+                {currentUser.email}
+              </Link>
+            </div>
             <Button
               danger
               ghost
