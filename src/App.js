@@ -9,7 +9,7 @@ import UpdateProfile from "./components/UpdateProfile";
 import Signup from "./components/Auth/Signup";
 import Login from "./components/Auth/Login";
 import Homepage from "./components/Homepage";
-import DetailForm from "./components/DetailForm";
+// import DetailForm from "./components/DetailForm";
 
 function App() {
   return (

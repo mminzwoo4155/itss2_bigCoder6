@@ -1,38 +1,14 @@
-import { Button, Layout, Menu, Pagination } from "antd";
-import React, { useMemo } from "react";
-import { useState } from "react";
-import {
-  Route,
-  BrowserRouter as Router,
-  Switch,
-  useHistory,
-} from "react-router-dom";
+import { Button, Layout, Menu } from "antd";
+import React from "react";
+// import { useState } from "react";
+import { Route, Switch, useHistory } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { LogoutOutlined, FileWordOutlined } from "@ant-design/icons/lib/icons";
 import "./index.css";
-import { mockData } from "../../mock/data";
-import useFormStorage from "../../hook/formStorage";
 import MainContent from "../MainContent";
 import DetailForm from "../DetailForm";
 const { Content, Sider } = Layout;
 
-// const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
-//   (icon, index) => {
-//     const key = String(index + 1);
-//     return {
-//       key: `sub${key}`,
-//       icon: React.createElement(icon),
-//       label: `subnav ${key}`,
-//       children: new Array(4).fill(null).map((_, j) => {
-//         const subKey = index * 4 + j + 1;
-//         return {
-//           key: subKey,
-//           label: `option${subKey}`,
-//         };
-//       }),
-//     };
-//   }
-// );
 const menuItem = [
   {
     key: "sub1",
@@ -40,7 +16,7 @@ const menuItem = [
     label: "For Company",
     children: [
       {
-        key: 1,
+        key: "1",
         label: `Mẫu đơn xin nghỉ việc`,
       },
       {
@@ -86,45 +62,9 @@ const menuItem = [
   },
 ];
 
-const PageSize = 10;
-
 const Homepage = () => {
   const { logout, currentUser } = useAuth();
   const history = useHistory();
-  const [query, putQuery] = useState("");
-
-  // Un-comment this to use mock-data
-  const [forms, putForms] = useState(mockData);
-
-  // Un-comment this to use data from firestore
-  // const [forms] = useFormStorage();
-
-  const getData = () => {
-    let formList = forms;
-    if (query) {
-      formList = forms.filter((form) =>
-        form.title.toLowerCase().match(query.toLowerCase())
-      );
-    }
-    return { displayList: formList };
-  };
-
-  const { displayList } = getData();
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const currentDisplayPage = useMemo(() => {
-    const firstPageIndex = (currentPage - 1) * PageSize;
-    const lastPageIndex = firstPageIndex + PageSize;
-    return displayList.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage, displayList]);
-
-  const handleSearch = (query) => {
-    putQuery(query);
-  };
-  const onChange = (page, pageSize) => {
-    console.log(page, pageSize);
-    setCurrentPage(page);
-  };
 
   const handleLogout = async () => {
     try {
@@ -159,6 +99,7 @@ const Homepage = () => {
             <Menu
               mode="inline"
               // defaultSelectedKeys={["sub1"]}
+              defaultSelectedKeys={["1"]}
               defaultOpenKeys={["sub1", "sub2"]}
               style={{
                 height: "100%",
@@ -167,8 +108,6 @@ const Homepage = () => {
               items={menuItem}
             />
           </Sider>
-
-          {/* <Router> */}
           <Layout
             style={{
               padding: "0 24px 24px",
@@ -188,7 +127,6 @@ const Homepage = () => {
               </Switch>
             </Content>
           </Layout>
-          {/* </Router> */}
         </Layout>
       </Layout>
     </>

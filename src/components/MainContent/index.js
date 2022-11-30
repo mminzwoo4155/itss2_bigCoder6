@@ -1,19 +1,33 @@
-import { Layout, Pagination } from "antd";
+import { Pagination } from "antd";
 import React, { useMemo } from "react";
 import { useState } from "react";
 import { mockData } from "../../mock/data";
 import Search from "../FormList/Search";
 import FormList from "../FormList";
-const { Content } = Layout;
+import useFormStorage from "../../hook/formStorage";
+import { useEffect } from "react";
+import { getAllForms } from "../../firebase/firestore/formStorage";
+
+// const { Content } = Layout;
 
 const PageSize = 10;
 const MainContent = () => {
   const [query, putQuery] = useState("");
-  const [forms, putForms] = useState(mockData);
+  const [forms, putForms] = useState([]);
 
   // Un-comment this to use data from firestore
   // const [forms] = useFormStorage();
-
+  const arr = getAllForms();
+  useEffect(() => {
+    arr
+      .then((res) => {
+        console.log("re render");
+        putForms(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   const getData = () => {
     let formList = forms;
     if (query) {

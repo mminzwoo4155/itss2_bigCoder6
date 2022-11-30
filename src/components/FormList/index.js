@@ -1,4 +1,4 @@
-import { Image, Row, Col, Card } from "antd";
+import { Row, Col, Card } from "antd";
 import React from "react";
 // import { mockData } from "../../mock/data";
 import { Link } from "react-router-dom";
@@ -17,7 +17,7 @@ const FormList = ({ data }) => {
                   textAlign: "center",
                 }}
                 title={item.title}
-                description="Mẫu đơn xin nghỉ việc là một văn bản hành chính do đó ngôn ngữ văn phong thể hiện phải lịch sự, nội dung thể hiện ngắn gọn, đủ ý."
+                description={item.short_description}
               />
             </Card>
           </Link>
