@@ -7,6 +7,8 @@ import { LogoutOutlined, FileWordOutlined } from "@ant-design/icons/lib/icons";
 import "./index.css";
 import MainContent from "../MainContent";
 import DetailForm from "../DetailForm";
+import FormManager from "../FormManager";
+
 const { Content, Sider } = Layout;
 
 const menuItem = [
@@ -80,7 +82,12 @@ const Homepage = () => {
     <>
       <Layout>
         <div className="header">
-          <div className="logo" />
+          <img src = "https://play-lh.googleusercontent.com/lMrBvD9Xr3Lyh6bs1OVDCanvhoZQEu4sWICjbM5amCrMSgHKFjnjfJ4_1iZpGME0L7Y" className="logo" />
+          <div className = "menu">
+            <Button type="primary" href ="/">Trang chủ</Button>
+            <Button type="primary" href ="/form-manager">Quản lí đơn từ</Button>
+            <Button type="primary" href ="">Tên nhân viên</Button>
+          </div>
           <div className="user-info">
             <div>{currentUser.email}</div>
             <Button
@@ -124,6 +131,7 @@ const Homepage = () => {
               <Switch>
                 <Route exact path="/" component={MainContent} />
                 <Route path="/form/*" component={DetailForm} />
+                <Route path="/form-manager" component={FormManager} />
               </Switch>
             </Content>
           </Layout>

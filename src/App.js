@@ -9,6 +9,8 @@ import UpdateProfile from "./components/UpdateProfile";
 import Signup from "./components/Auth/Signup";
 import Login from "./components/Auth/Login";
 import Homepage from "./components/Homepage";
+import FormManager from "./components/FormManager";
+
 // import DetailForm from "./components/DetailForm";
 
 function App() {
@@ -27,6 +29,7 @@ function App() {
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
           <Route path="/forgot-password" component={ForgotPassword} />
+          <Route path="/form-manager" component={FormManager} />
         </Switch>
       </AuthProvider>
     </Router>
