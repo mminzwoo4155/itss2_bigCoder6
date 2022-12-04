@@ -15,3 +15,14 @@ export const getAllForms = async () => {
         return [];
     }
 }
+
+export const getFormById = async (formId) => {
+    const docRef = db.collection("forms").doc(`${formId}`);
+
+    docRef.get().then((doc) => {
+        return {...doc.data(), id: doc.id};
+    }).catch(e => {
+        console.log("Error getting document: ", e);
+        return null;
+    })
+}

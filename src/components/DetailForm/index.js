@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { mockData } from "../../mock/data";
-import { Button, Radio, Space, Input, Form } from "antd";
+import { Button, Radio, Space, Input, Form, Col, Row } from "antd";
 import "./index.css";
 import { DownloadOutlined } from "@ant-design/icons";
 import useFormStorage from "../../hook/formStorage";
-import { getAllForms } from "../../firebase/firestore/formStorage";
+import { getAllForms, getFormById } from "../../firebase/firestore/formStorage";
 // const { Meta } = Card;
 const data = {
   title: 'Giay chung nhan sinh vien',
@@ -45,13 +45,12 @@ const DetailForm = () => {
   const [data1, setData] = useState({});
 
   useEffect(() => {
-    const getFormById = async () => {
-      const forms = await getAllForms();
-      setData(forms[id]);
-      console.log(forms[id]);
+    const getForm = async () => {
+      const formToFill = await getFormById(id);
+      setData(formToFill);
     };
     
-    getFormById()
+    getForm()
       .then(() => console.log(data1))
       .catch((e) => console.log(e));
   }, []);
@@ -66,43 +65,48 @@ const DetailForm = () => {
 
   return (
     <div className="">
-      <Button icon={<DownloadOutlined />}>Tải xuống</Button>
-      <div className="detail-form">
-        <h3>{data.title}</h3>
-        <p>{data.full_description}</p>
-        <img src={data.src} alt="img" />
-        <h4>Mẫu đơn</h4>
-      </div>
-      <Form layout="vertical" form={form}>
-        {data.fields.map(field => {
-          switch(field.answer_type){
-            case 'choice': 
-              return (
-                <Form.Item label={field.question} name={field.question}>
-                  <Radio.Group>
-                    <Space direction="vertical">
-                      {
-                        field.answer.map(answer => (
-                          <Radio value={answer}>{answer}</Radio>
-                        ))
-                      }
-                    </Space>
-                  </Radio.Group>
-                </Form.Item>
-              );
-            case "text":
-              return (
-                <Form.Item label={field.question} name={field.question}>
-                  <Input placeholder="Cau tra loi cua ban"></Input>
-                </Form.Item>
-              )
-            default: return null;
-          }
-        })}
-        <Form.Item>
-          <Button type="primary" htmlType="submit" onClick={() => handleFormSubmit()}>Gửi</Button>
-        </Form.Item>
-      </Form>
+      <Row>
+        <Col span={8}>
+          <h3>{data.title}</h3>
+          <p>{data.full_description}</p>
+          <img src={data.src} alt="img"/>
+          <br/>
+          <Button icon={<DownloadOutlined />}>Tải xuống</Button>
+        </Col>
+        <Col span={16}>
+          <h4>Mẫu đơn</h4>
+          <Form layout="vertical" form={form}>
+            {data.fields.map(field => {
+              switch(field.answer_type){
+                case 'choice': 
+                  return (
+                    <Form.Item label={field.question} name={field.question}>
+                      <Radio.Group>
+                        <Space direction="vertical">
+                          {
+                            field.answer.map(answer => (
+                              <Radio value={answer}>{answer}</Radio>
+                            ))
+                          }
+                        </Space>
+                      </Radio.Group>
+                    </Form.Item>
+                  );
+                case "text":
+                  return (
+                    <Form.Item label={field.question} name={field.question}>
+                      <Input placeholder="Cau tra loi cua ban"></Input>
+                    </Form.Item>
+                  )
+                default: return null;
+              }
+            })}
+            <Form.Item>
+              <Button type="primary" htmlType="submit" onClick={() => handleFormSubmit()}>Gửi</Button>
+            </Form.Item>
+          </Form>
+        </Col>
+      </Row>
     </div>
   );
 };

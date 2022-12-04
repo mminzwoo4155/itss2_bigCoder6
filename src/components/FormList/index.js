@@ -10,7 +10,7 @@ const FormList = ({ data }) => {
     <Row justify="space-between" className="form-list" align="bottom">
       {data.map((item, index) => (
         <Col span={7} key={index}>
-          <Link to={`form/${index}`}>
+          <Link to={`form/${item.id}`}>
             <Card bordered={false} cover={<img alt="example" src={item.src} />}>
               <Meta
                 style={{
