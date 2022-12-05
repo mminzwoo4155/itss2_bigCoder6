@@ -13,21 +13,21 @@ import { getAllForms } from "../../firebase/firestore/formStorage";
 const PageSize = 10;
 const MainContent = () => {
   const [query, putQuery] = useState("");
-  const [forms, putForms] = useState([]);
+  // const [forms, putForms] = useState([]);
 
   // Un-comment this to use data from firestore
-  // const [forms] = useFormStorage();
-  const arr = getAllForms();
-  useEffect(() => {
-    arr
-      .then((res) => {
-        console.log("re render");
-        putForms(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  const [forms] = useFormStorage();
+  // const arr = getAllForms();
+  // useEffect(() => {
+  //   arr
+  //     .then((res) => {
+  //       console.log("re render");
+  //       putForms(res);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
   const getData = () => {
     let formList = forms;
     if (query) {
@@ -50,8 +50,7 @@ const MainContent = () => {
   const handleSearch = (query) => {
     putQuery(query);
   };
-  const onChange = (page, pageSize) => {
-    console.log(page, pageSize);
+  const onChange = (page) => {
     setCurrentPage(page);
   };
   return (

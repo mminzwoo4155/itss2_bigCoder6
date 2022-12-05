@@ -5,15 +5,15 @@ const useFormStorage = () => {
     const [forms, setForms] = useState([]);
 
     useEffect(() => {
-        getForms();
-    }, [forms]);
+        getForms().catch(console.error);
+    }, []);
 
     const getForms = async () => {
         const forms = await getAllForms();
         setForms(forms);
     }
 
-    return [forms]
+    return [forms];
 }
 
 export default useFormStorage;

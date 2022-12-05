@@ -10,8 +10,8 @@ import Signup from "./components/Auth/Signup";
 import Login from "./components/Auth/Login";
 import Homepage from "./components/Homepage";
 import FormManager from "./components/FormManager";
-
-// import DetailForm from "./components/DetailForm";
+import Profile from "./components/Profile/Profile";
+import DetailForm from "./components/DetailForm";
 
 function App() {
   return (
@@ -26,6 +26,7 @@ function App() {
           <PrivateRoute exact path="/" component={Homepage} />
           <PrivateRoute path="/update-profile" component={UpdateProfile} />
           <PrivateRoute path="/form/*" component={Homepage} />
+          <PrivateRoute path="/profile/:uid" component={Profile} />
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
           <Route path="/forgot-password" component={ForgotPassword} />

@@ -68,6 +68,8 @@ const Homepage = () => {
   const { logout, currentUser } = useAuth();
   const history = useHistory();
 
+  console.log(currentUser.uid);
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -89,7 +91,11 @@ const Homepage = () => {
             <Button type="primary" href ="/">Tên nhân viên</Button>
           </div>
           <div className="user-info">
-            <div>{currentUser.email}</div>
+            <div>
+              <Link to={`/profile/${currentUser.uid}`}>
+                {currentUser.email}
+              </Link>
+            </div>
             <Button
               danger
               ghost
