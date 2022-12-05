@@ -9,8 +9,9 @@ import UpdateProfile from "./components/UpdateProfile";
 import Signup from "./components/Auth/Signup";
 import Login from "./components/Auth/Login";
 import Homepage from "./components/Homepage";
+import FormManager from "./components/FormManager";
 import Profile from "./components/Profile/Profile";
-// import DetailForm from "./components/DetailForm";
+import DetailForm from "./components/DetailForm";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
           <Route path="/forgot-password" component={ForgotPassword} />
+          <PrivateRoute path="/form-manager" component={FormManager} />
         </Switch>
       </AuthProvider>
     </Router>

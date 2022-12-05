@@ -1,13 +1,12 @@
-import { Button, Layout, Menu } from "antd";
 import React from "react";
-// import { useState } from "react";
+import "./index.css";
+import { dataForm } from "./../../mock/formManager";
+import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
+import { Layout } from "antd";
+import { Button, Menu } from "antd";
 import { Route, Switch, useHistory, Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { LogoutOutlined, FileWordOutlined } from "@ant-design/icons/lib/icons";
-import "./index.css";
-import MainContent from "../MainContent";
-import DetailForm from "../DetailForm";
-import FormManager from "../FormManager";
 
 const { Content, Sider } = Layout;
 
@@ -64,11 +63,9 @@ const menuItem = [
   },
 ];
 
-const Homepage = () => {
+const FormManager = () => {
   const { logout, currentUser } = useAuth();
   const history = useHistory();
-
-  console.log(currentUser.uid);
 
   const handleLogout = async () => {
     try {
@@ -79,23 +76,25 @@ const Homepage = () => {
       // setError("Failed to log out");
     }
   };
-
   return (
     <>
       <Layout>
         <div className="header">
-          <img src = "https://play-lh.googleusercontent.com/lMrBvD9Xr3Lyh6bs1OVDCanvhoZQEu4sWICjbM5amCrMSgHKFjnjfJ4_1iZpGME0L7Y" className="logo" />
-          <div className = "menu">
-            <Button type="primary" href ="/">Trang chủ</Button>
-            <Button type="primary" href="/form-manager">Quản lí đơn từ</Button>
-            <Button type="primary" href ="/">Tên nhân viên</Button>
+          <img
+            src="https://play-lh.googleusercontent.com/lMrBvD9Xr3Lyh6bs1OVDCanvhoZQEu4sWICjbM5amCrMSgHKFjnjfJ4_1iZpGME0L7Y"
+            className="logo"
+          />
+          <div className="menu">
+            <Button type="primary" href="/">
+              Trang chủ
+            </Button>
+            <Link to="/form-manager">Quản lí đơn từ</Link>
+            <Button type="primary" href="">
+              Tên nhân viên
+            </Button>
           </div>
           <div className="user-info">
-            <div>
-              <Link to={`/profile/${currentUser.uid}`}>
-                {currentUser.email}
-              </Link>
-            </div>
+            <div>{currentUser.email}</div>
             <Button
               danger
               ghost
@@ -121,25 +120,33 @@ const Homepage = () => {
               items={menuItem}
             />
           </Sider>
-          <Layout
-            style={{
-              padding: "0 24px 24px",
-            }}
-          >
-            <Content
-              className="site-layout-background"
-              style={{
-                padding: 24,
-                margin: 0,
-                minHeight: 280,
-              }}
-            >
-              <Switch>
-                <Route exact path="/*" component={MainContent} />
-                <Route exact path="/form/*" component={DetailForm} />
-                <Route path="/form-manager" component={FormManager} />
-              </Switch>
-            </Content>
+          <Layout>
+            <div className="form">
+              <table>
+                <tr>
+                  <th>STT</th>
+                  <th>Người tạo đơn</th>
+                  <th>Thời gian tạo đơn</th>
+                  <th>Lời nhắn từ hệ thống</th>
+                  <th>Trạng thái</th>
+                  <th>Xem chi tiết</th>
+                </tr>
+                {dataForm.map((val, key) => {
+                  return (
+                    <tr key={key}>
+                      <td>{val.id}</td>
+                      <td>{val.name}</td>
+                      <td>{val.timeCreate}</td>
+                      <td>{val.mess}</td>
+                      <td>{val.status}</td>
+                      <td>
+                        <EyeOutlined />
+                      </td>
+                    </tr>
+                  );
+                })}
+              </table>
+            </div>
           </Layout>
         </Layout>
       </Layout>
@@ -147,4 +154,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default FormManager;
