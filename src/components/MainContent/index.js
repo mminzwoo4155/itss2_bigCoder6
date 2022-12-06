@@ -17,17 +17,7 @@ const MainContent = () => {
 
   // Un-comment this to use data from firestore
   const [forms] = useFormStorage();
-  // const arr = getAllForms();
-  // useEffect(() => {
-  //   arr
-  //     .then((res) => {
-  //       console.log("re render");
-  //       putForms(res);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
+
   const getData = () => {
     let formList = forms;
     if (query) {
@@ -55,7 +45,7 @@ const MainContent = () => {
   };
   return (
     <div>
-      <div className="title">Mẫu đơn xin nghỉ việc</div>
+      <div className="title">Danh sách đơn</div>
       <Search query={query} onchange={handleSearch} />
       <FormList data={currentDisplayPage} />
       <Pagination
