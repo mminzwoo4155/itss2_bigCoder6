@@ -19,15 +19,14 @@ export default function UpdateProfile() {
   const history = useHistory()
 
   function isPhoneNumber(str) {
-    if (typeof str != "string" || str.length !== 10) return false 
+    if (typeof str != 'string' || str.length !== 10) return false 
     return !isNaN(str) && !isNaN(parseFloat(str)) 
   }
 
   function handleSubmit(e) {
+    
     e.preventDefault()
-    // if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-    //   return setError("Passwords do not match")
-    // }
+
     if (idRef.current.value.length !== 12) {
       return setError('Invalid id')
     }

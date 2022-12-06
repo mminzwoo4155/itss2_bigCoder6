@@ -8,7 +8,9 @@ const Signup = () => {
   const [form] = Form.useForm();
   const { signup } = useAuth();
   const history = useHistory();
+
   const handleSubmit = async (val) => {
+
     if((/\d/.test(val.password) || /[a-zA-Z]/.test(val.password)) === false){
       notification.error({
         message: "Registry Error",
@@ -16,10 +18,21 @@ const Signup = () => {
       })
       return;
     }
+
     if(val.cfpassword === val.password){
       try {
         await signup(val.email, val.password);
         history.push("/");
+        const profile = {
+          email: val.email,
+          name: '',
+          specialized: '',
+          id: '',
+          studentId: '',
+          phoneNumber: '', 
+        }
+        const jsonProfile = JSON.stringify(profile)
+        localStorage.setItem('profile', jsonProfile)
       } catch(e) {
         notification.error({
           message: "Registry Error",
