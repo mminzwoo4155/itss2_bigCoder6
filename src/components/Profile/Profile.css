@@ -60,7 +60,7 @@
   .profile-name {
     position: absolute;
     margin-top: 55px;
-    right: 0;
+    left: 175px;
   }
 
   .info-detail {
