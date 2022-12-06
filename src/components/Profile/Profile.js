@@ -8,6 +8,9 @@ import "./Profile.css";
 const Profile = () => {
     const { logout, currentUser } = useAuth();
     const history = useHistory();
+    const profile = JSON.parse(localStorage.getItem('profile'))
+
+    console.log(profile);
 
     const handleLogout = async () => {
         try {
@@ -59,7 +62,7 @@ const Profile = () => {
               />
               </div>
               <div className="profile-name">
-                <h3><b>名前</b>:   {currentUser.email}</h3>
+                <h3><b>名前</b>:   {profile.name}</h3>
               </div>
             </div>
 
@@ -71,9 +74,10 @@ const Profile = () => {
 
               <div className="left">
                 <p><b>メールアドレス:</b></p>
-                <p><b>クラス:</b></p>
                 <p><b>学部:</b></p>
+                <p><b>証明番号:</b></p>
                 <p><b>学籍番号:</b></p>
+                <p><b>電話番号:</b></p>
                 <p style={{fontSize: 15}}><b>
                     <Link to={`/forgot-password`}>
                         パスワード変更？
@@ -82,10 +86,11 @@ const Profile = () => {
               </div>
 
               <div className="right">
-                <p><input disabled defaultValue={currentUser.email}></input></p>
-                <p><input disabled defaultValue={'hom nay la thu 4'}></input></p>
-                <p><input disabled defaultValue={''}></input></p>
-                <p><input disabled defaultValue={'troi dang mua'}></input></p>
+                <p><input disabled defaultValue={profile.email}></input></p>
+                <p><input disabled defaultValue={profile.specialized || 'N/A'}></input></p>
+                <p><input disabled defaultValue={profile.id}></input></p>
+                <p><input disabled defaultValue={profile.studentId}></input></p>
+                <p><input disabled defaultValue={profile.phoneNumber}></input></p>
               </div>
             </div>
 
