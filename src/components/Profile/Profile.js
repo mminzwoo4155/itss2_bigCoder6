@@ -62,7 +62,7 @@ const Profile = () => {
               />
               </div>
               <div className="profile-name">
-                <h3><b>名前</b>:   {profile.name}</h3>
+                <h3><b>名前</b>:   {profile.name || 'N/A'}</h3>
               </div>
             </div>
 
@@ -88,9 +88,9 @@ const Profile = () => {
               <div className="right">
                 <p><input disabled defaultValue={profile.email}></input></p>
                 <p><input disabled defaultValue={profile.specialized || 'N/A'}></input></p>
-                <p><input disabled defaultValue={profile.id}></input></p>
-                <p><input disabled defaultValue={profile.studentId}></input></p>
-                <p><input disabled defaultValue={profile.phoneNumber}></input></p>
+                <p><input disabled defaultValue={profile.id || 'N/A'}></input></p>
+                <p><input disabled defaultValue={profile.studentId || 'N/A'}></input></p>
+                <p><input disabled defaultValue={profile.phoneNumber || 'N/A'}></input></p>
               </div>
             </div>
 
