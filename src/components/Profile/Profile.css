@@ -49,11 +49,11 @@
   border: 3px solid white;
 }
 
-  .profile-name {
-    position: absolute;
-    margin-top: 55px;
-    left: 175px;
-  }
+.profile-name {
+  position: absolute;
+  margin-top: 55px;
+  left: 200px;
+}
 
 .info-detail {
   width: 50%;
