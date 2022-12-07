@@ -10,8 +10,7 @@ const Signup = () => {
   const history = useHistory();
 
   const handleSubmit = async (val) => {
-
-    if((/\d/.test(val.password) || /[a-zA-Z]/.test(val.password)) === false){
+    if((/\d/.test(val.password) && /[a-z]/.test(val.password) && /[A-Z]/.test(val.password)) === false){
       notification.error({
         message: "Registry Error",
         description: "Password must contains lowercase letter, uppercase letter, numbers"

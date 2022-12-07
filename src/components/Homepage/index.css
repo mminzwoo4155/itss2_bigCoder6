@@ -7,12 +7,16 @@
 .header {
   color: rgba(255, 255, 255, 0.681);
   background: #001529;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: space-between; */
   padding: 0 30px;
+  position: relative;
 }
 .user-info {
+  position: absolute;
+  right: 10px;
+  top: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -24,16 +28,12 @@
 }
 
 .site-layout-background {
+  margin-top: 20px;
   background: #fff;
-  /* height: 90vh; */
+  height: 89vh;
 }
-.title {
-  font-weight: 600;
-  font-size: 24px;
-  line-height: 36px;
-  margin-bottom: 20px;
-}
+
 .pagination {
-  margin: 10px 0;
+  /* margin: 10px 0; */
   justify-content: end !important;
 }

@@ -1,61 +1,53 @@
 .logo {
-    float: left;
-    width: 120px;
-    height: 31px;
-    margin: 16px 24px 16px 0;
-    background: rgba(255, 255, 255, 0.3);
-  }
-  .header {
-    color: rgba(255, 255, 255, 0.681);
-    background: #001529;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 30px;
-  }
-  .user-info {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    /* width: 120px; */
-  }
+  float: left;
+  width: 120px;
+  height: 31px;
+  margin: 16px 24px 16px 0;
+  background: rgba(255, 255, 255, 0.3);
+}
 
-  .update-profile {
-    margin-left: 80%;
-    font-size: 20px;
-    border: 1px solid gray;
-    width: 150px;
-    padding: 8px 0;
-    margin-top: 100px;
-    text-align: center;
-  }
+.user-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* width: 120px; */
+}
 
-  .profile-top {
-    width: 50%;
-    margin-left: 25%;
-    margin-top: 50px;
-    display: flex;
-    position: relative;
-    /* text-align: center;
+.update-profile {
+  margin-left: 80%;
+  font-size: 20px;
+  border: 1px solid gray;
+  width: 150px;
+  padding: 8px 0;
+  margin-top: 100px;
+  text-align: center;
+}
+
+.profile-top {
+  width: 50%;
+  margin-left: 25%;
+  margin-top: 50px;
+  display: flex;
+  position: relative;
+  /* text-align: center;
     justify-content: center; */
-  }
+}
 
-  .profile-img {
+.profile-img {
+}
 
-  }
-
-  .profileUserImg {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    /* position: absolute;
+.profileUserImg {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  /* position: absolute;
     left: 0;
     right: 0; */
-    margin: auto;
-    /* top: 150px; */
-    border: 3px solid white;
-  }
+  margin: auto;
+  /* top: 150px; */
+  border: 3px solid white;
+}
 
   .profile-name {
     position: absolute;
@@ -63,33 +55,33 @@
     left: 175px;
   }
 
-  .info-detail {
-    width: 50%;
-    margin-left: 25%;
-    margin-top: 100px;
-    font-size: 25px;
-    display: flex;
-    /* position: relative; */
-  }
+.info-detail {
+  width: 50%;
+  margin-left: 25%;
+  margin-top: 100px;
+  font-size: 25px;
+  display: flex;
+  /* position: relative; */
+}
 
-  .info-detail .right {
-    /* position: absolute;
+.info-detail .right {
+  /* position: absolute;
     right: 0; */
-    margin-left: 133px;
-  }
+  margin-left: 133px;
+}
 
 input {
-    border: none;
+  border: none;
 }
 
 .button button {
-    font-size: 30px;
-    width: 200px;
+  font-size: 30px;
+  width: 200px;
 }
 
 .button {
-    display: flex;
-    text-align: center;
-    justify-content: center;
-    padding: 30px 0;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  padding: 30px 0;
 }
