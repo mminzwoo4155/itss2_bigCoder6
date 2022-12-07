@@ -63,7 +63,7 @@ export default function UpdateProfile() {
 
     Promise.all(promises)
       .then(() => {
-        history.push("/")
+        history.push(`/profile/${currentUser.uid}`)
         alert('Update successful')
       })
       .catch(() => {
