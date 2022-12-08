@@ -6,9 +6,9 @@ import { useAuth } from "../../contexts/AuthContext";
 import "./Profile.css";
 
 const Profile = () => {
-  const { logout, currentUser } = useAuth();
+  const { logout, currentUser, currentProfile } = useAuth();
   const history = useHistory();
-  const profile = JSON.parse(localStorage.getItem('profile'))
+  // const profile = JSON.parse(localStorage.getItem('profile'))
 
   return (
     <>
@@ -30,7 +30,7 @@ const Profile = () => {
             </div>
             <div className="profile-name">
               <h3>
-                <b>名前</b>: {profile.name || 'N/A'}
+                <b>名前</b>: {currentProfile.name || 'N/A'}
               </h3>
             </div>
           </div>
@@ -51,11 +51,11 @@ const Profile = () => {
             </div>
 
             <div className="right">
-              <p><input disabled defaultValue={profile.email}></input></p>
-              <p><input disabled defaultValue={profile.specialized || 'N/A'}></input></p>
-              <p><input disabled defaultValue={profile.id || 'N/A'}></input></p>
-              <p><input disabled defaultValue={profile.studentId || 'N/A'}></input></p>
-              <p><input disabled defaultValue={profile.phoneNumber || 'N/A'}></input></p>
+              <p><input disabled defaultValue={currentProfile.email || 'N/A'}></input></p>
+              <p><input disabled defaultValue={currentProfile.course || 'N/A'}></input></p>
+              <p><input disabled defaultValue={currentProfile.id || 'N/A'}></input></p>
+              <p><input disabled defaultValue={currentProfile.student_id || 'N/A'}></input></p>
+              <p><input disabled defaultValue={currentProfile.phoneNumber || 'N/A'}></input></p>
             </div>
           </div>
 
