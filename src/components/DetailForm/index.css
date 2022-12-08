@@ -5,3 +5,6 @@
 .detail-form {
   text-align: center;
 }
+.form-description {
+  white-space: pre-line;
+}

@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { auth } from "../firebase";
+import { getUserByEmail } from "../firebase/firestore/userStorage";
 
 const AuthContext = React.createContext();
 
@@ -9,6 +10,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
+  const [currentProfile, setProfile] = useState();
   const [loading, setLoading] = useState(true);
 
   function signup(email, password) {
@@ -38,6 +40,10 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
+      if(user){
+        // set profile here
+        getUserByEmail(user.email).then(res => setProfile(res));
+      }
       setLoading(false);
     });
 
@@ -46,6 +52,7 @@ export function AuthProvider({ children }) {
 
   const value = {
     currentUser,
+    currentProfile,
     login,
     signup,
     logout,

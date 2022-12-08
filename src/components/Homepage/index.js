@@ -14,10 +14,10 @@ import Profile from "../Profile/Profile";
 const { Content, Header } = Layout;
 
 const Homepage = () => {
-  const { logout, currentUser } = useAuth();
+  const { logout, currentUser, currentProfile } = useAuth();
   const history = useHistory();
 
-  console.log(currentUser.uid);
+  // console.log(currentUser.uid, currentProfile);
 
   const handleLogout = async () => {
     try {
@@ -45,7 +45,7 @@ const Homepage = () => {
               <Link to="/form-manager">Quản lý đơn từ</Link>
             </Menu.Item>
             <Menu.Item key="3">
-              <Link to="/">Tên nhân viên</Link>
+              <Link to="/">{currentProfile ? currentProfile.role : 'N/A'}</Link>
             </Menu.Item>
           </Menu>
 

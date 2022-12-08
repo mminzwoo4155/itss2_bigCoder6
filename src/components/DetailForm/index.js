@@ -36,7 +36,7 @@ const DetailForm = () => {
       <Row>
         <Col span={8}>
           <h3>{data1.title}</h3>
-          <p>{data1.full_description}</p>
+          <p className="form-description">{data1.full_description}</p>
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/PDF_icon.svg/768px-PDF_icon.svg.png"
             style={{
