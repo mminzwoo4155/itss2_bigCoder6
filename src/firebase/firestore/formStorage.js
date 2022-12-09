@@ -29,17 +29,24 @@ export const getFormById = async (formId) => {
 export const getAllSubmittedForm = async () => {
   try {
     const snapshot = await db.collection("submit_form").get();
-    return snapshot.docs.map((doc) => {return {id:doc, ...doc.data()}})
-  } catch(error) {
-    return [];
-  }
-}
-
-export const getSubmittedFormByEmail = async (email) => {
-  try {
-    const querySnapshot = await db.collection("submit_form").where("student", "==", email).get();
-    return querySnapshot.docs.map((doc) => {return {id: doc.id, ...doc.data()}});
+    return snapshot.docs.map((doc) => {
+      return { id: doc.id, ...doc.data() };
+    });
   } catch (error) {
     return [];
   }
-}
+};
+
+export const getSubmittedFormByEmail = async (email) => {
+  try {
+    const querySnapshot = await db
+      .collection("submit_form")
+      .where("student", "==", email)
+      .get();
+    return querySnapshot.docs.map((doc) => {
+      return { id: doc.id, ...doc.data() };
+    });
+  } catch (error) {
+    return [];
+  }
+};
