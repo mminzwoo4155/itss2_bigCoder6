@@ -62,3 +62,23 @@ export const submitForm = async (submitEmail, formId, data) => {
   }
   await db.collection("submit_form").doc().set(docData);
 }
+
+export const approveForm = async (submitFormId) => {
+  const update = {status: 1}
+  try {
+    db.collection("submit_form").doc(submitFormId).update(update);
+    return 'Approved';
+  } catch (e) {
+    return 'Approve error'
+  }
+}
+
+export const disapproveForm = async (submitFormId) => {
+  const update = {status: 0}
+  try {
+    db.collection("submit_form").doc(submitFormId).update(update);
+    return 'Disapproved';
+  } catch (e) {
+    return 'Disapprove error'
+  }
+}

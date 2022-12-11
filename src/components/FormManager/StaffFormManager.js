@@ -13,6 +13,7 @@ import ApproveFormModal from "./ApproveFormModal";
 const StaffFormManager = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [formData, setFormData] = useState([]);
+  const [toProcessFormId, setToProcessFormId] = useState('');
   useEffect(() => {
     const getFormData = getAllSubmittedForm();
     getFormData.then((res) => setFormData(res));
@@ -51,7 +52,12 @@ const StaffFormManager = () => {
       render: (_, record) => (
         <>
           {" "}
-          <EyeOutlined onClick={() => setIsOpenModal(true)} />
+          <EyeOutlined onClick={
+            () => {
+              setIsOpenModal(true)
+              setToProcessFormId(record.id)
+              }
+          } />
         </>
       ),
     },
@@ -64,9 +70,9 @@ const StaffFormManager = () => {
         <Table
           columns={columns}
           dataSource={formData.length > 0 ? formData : []}
-          rowKey={(item) => item.id}
+          rowKey={(item) => console.log('Here ' + item.id)}
         />
-        <ApproveFormModal isOpen={isOpenModal} setIsOpen={setIsOpenModal} />
+        <ApproveFormModal isOpen={isOpenModal} setIsOpen={setIsOpenModal} id={toProcessFormId}/>
       </div>
     </>
   );
