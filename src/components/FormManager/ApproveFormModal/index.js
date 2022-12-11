@@ -6,10 +6,13 @@ import {
   approveForm,
   disapproveForm,
   getSubmittedFormById,
+  getFormById,
+  getQuestionById
 } from "../../../firebase/firestore/formStorage";
 
 const ApproveFormModal = ({ isOpen, setIsOpen, id, getData }) => {
   const [detail, setDetail] = useState();
+  // const [question, setQuestion] = useState();
   useEffect(() => {
     const data = getSubmittedFormById(id);
     data.then((res) => {
@@ -24,7 +27,7 @@ const ApproveFormModal = ({ isOpen, setIsOpen, id, getData }) => {
     disapproveForm(id)
       .then(() => {
         notification.success({
-          message: "Success approve form",
+          message: "Success disapprove form",
         });
         getData();
       })
@@ -51,6 +54,18 @@ const ApproveFormModal = ({ isOpen, setIsOpen, id, getData }) => {
       });
     setIsOpen(false);
   };
+  const answer = detail?.answers
+  // console.log(detail?.form_id)
+  // useEffect(() => {
+  //   const data = getQuestionById(detail?.form_id);
+  //   data.then((res) => {
+  //     setQuestion(res);
+  //   });
+  //   data.then((res) => {
+  //     console.log(res);
+  //   });
+  // }, [id]);
+
   return (
     <Modal
       open={isOpen}
@@ -68,7 +83,15 @@ const ApproveFormModal = ({ isOpen, setIsOpen, id, getData }) => {
         </Button>,
       ]}
     >
-      {detail?.status}
+      <div>
+        <p><strong>Course: </strong>{answer?.course}</p>
+        <p><strong>Name: </strong>{answer?.name}</p>
+        <p><strong>Student id: </strong>{answer?.student_id}</p>
+        <p><strong>Tình trạng thẻ: </strong>{answer?.question1}</p>
+        <p><strong>Lý do làm thẻ: </strong>{answer?.question2}</p>
+        <p><strong>School: </strong>{answer?.school}</p>
+        <p><strong>Year: </strong>{answer?.year}</p>
+      </div>
     </Modal>
   );
 };
