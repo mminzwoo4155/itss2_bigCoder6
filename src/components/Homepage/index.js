@@ -17,15 +17,12 @@ const Homepage = () => {
   const { logout, currentUser, currentProfile } = useAuth();
   const history = useHistory();
 
-  // console.log(currentUser.uid, currentProfile);
-
   const handleLogout = async () => {
     try {
       await logout();
       history.push("/login");
     } catch {
       console.log("err");
-      // setError("Failed to log out");
     }
   };
 

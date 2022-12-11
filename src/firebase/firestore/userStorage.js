@@ -11,3 +11,11 @@ export const getUserByEmail = async (userEmail) => {
         return [];
     }
 }
+
+export const registerNewProfile = async (userEmail, role) => {
+    const docData = {
+        email: userEmail,
+        role: role
+    };
+    await db.collection("users").doc().set(docData);
+}
