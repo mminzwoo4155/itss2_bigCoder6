@@ -30,7 +30,8 @@
 .site-layout-background {
   margin-top: 20px;
   background: #fff;
-  height: 89vh;
+  height: 86vh;
+  overflow-y: scroll;
 }
 
 .pagination {

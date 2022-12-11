@@ -1,16 +1,16 @@
-.form tr:nth-child(even){background-color: #f2f2f2;}
+/* .form tr:nth-child(even){background-color: #f2f2f2;}
 
-.form tr:hover {background-color: #ddd;}
+.form tr:hover {background-color: #ddd;} */
 
 .form th {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
-  background-color: #04AA6D;
+  background-color: #04aa6d;
   color: white;
   width: 200px;
 }
 
 .form td {
-    height: 50px;
+  height: 50px;
 }

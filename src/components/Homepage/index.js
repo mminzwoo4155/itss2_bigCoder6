@@ -30,8 +30,8 @@ const Homepage = () => {
     <>
       <Layout>
         <Header className="header">
-          <img
-            src="https://play-lh.googleusercontent.com/lMrBvD9Xr3Lyh6bs1OVDCanvhoZQEu4sWICjbM5amCrMSgHKFjnjfJ4_1iZpGME0L7Y"
+          <div
+            // src="https://play-lh.googleusercontent.com/lMrBvD9Xr3Lyh6bs1OVDCanvhoZQEu4sWICjbM5amCrMSgHKFjnjfJ4_1iZpGME0L7Y"
             className="logo"
           />
           <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["1"]}>
@@ -42,7 +42,7 @@ const Homepage = () => {
               <Link to="/form-manager">Quản lý đơn từ</Link>
             </Menu.Item>
             <Menu.Item key="3">
-              <Link to="/">{currentProfile ? currentProfile.role : 'N/A'}</Link>
+              <Link to="/">{currentProfile ? currentProfile.role : "N/A"}</Link>
             </Menu.Item>
           </Menu>
 
