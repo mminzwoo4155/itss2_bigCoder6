@@ -82,3 +82,15 @@ export const disapproveForm = async (submitFormId) => {
     return "Disapprove error";
   }
 };
+
+export const getSubmittedFormById = async (submitFormId) => {
+  // console.log("111", submitFormId);
+  // console.log(data);
+  try {
+    let data = await db.collection("submit_form").doc(submitFormId).get();
+    console.log(data.data());
+    return { ...data.data() };
+  } catch (error) {
+    return null;
+  }
+};

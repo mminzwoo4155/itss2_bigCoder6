@@ -1,11 +1,25 @@
-import { Modal, notification } from "antd";
+import { Modal, notification, Button } from "antd";
 import React from "react";
+import { useState } from "react";
+import { useEffect } from "react";
 import {
   approveForm,
   disapproveForm,
+  getSubmittedFormById,
 } from "../../../firebase/firestore/formStorage";
 
 const ApproveFormModal = ({ isOpen, setIsOpen, id, getData }) => {
+  const [detail, setDetail] = useState();
+  useEffect(() => {
+    const data = getSubmittedFormById(id);
+    data.then((res) => {
+      setDetail(res);
+    });
+    // data.then((res) => {
+    //   console.log(res);
+    // });
+  }, [id]);
+
   const handleCancel = () => {
     disapproveForm(id)
       .then(() => {
@@ -40,13 +54,21 @@ const ApproveFormModal = ({ isOpen, setIsOpen, id, getData }) => {
   return (
     <Modal
       open={isOpen}
-      onCancel={handleCancel}
-      onOk={handleOK}
+      onCancel={() => setIsOpen(false)}
+      // onOk={handleOK}
       okText={"Approve"}
       cancelText={"Disapprove"}
       title="Duyệt yêu cầu"
+      footer={[
+        <Button key={1} danger ghost onClick={handleCancel}>
+          Reject
+        </Button>,
+        <Button key={2} type="primary" onClick={handleOK}>
+          Approve
+        </Button>,
+      ]}
     >
-      DETAIL
+      {detail?.status}
     </Modal>
   );
 };
