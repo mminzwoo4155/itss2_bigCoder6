@@ -42,7 +42,7 @@ import StaffFormManager from "./StaffFormManager";
 
 const FormManager = () => {
   const { currentProfile } = useAuth();
-  console.log(currentProfile);
+  // console.log(currentProfile);
   switch (currentProfile?.role) {
     case "student":
       return <StudentFormManager />;
