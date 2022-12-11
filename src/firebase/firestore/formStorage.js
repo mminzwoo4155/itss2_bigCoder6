@@ -66,7 +66,7 @@ export const submitForm = async (submitEmail, formId, data) => {
 export const approveForm = async (submitFormId) => {
   const update = {status: 1}
   try {
-    db.collection("submit_form").doc(submitFormId).update(update);
+    await db.collection("submit_form").doc(submitFormId).update(update);
     return 'Approved';
   } catch (e) {
     return 'Approve error'
@@ -76,9 +76,21 @@ export const approveForm = async (submitFormId) => {
 export const disapproveForm = async (submitFormId) => {
   const update = {status: 0}
   try {
-    db.collection("submit_form").doc(submitFormId).update(update);
+    await db.collection("submit_form").doc(submitFormId).update(update);
     return 'Disapproved';
   } catch (e) {
     return 'Disapprove error'
+  }
+}
+
+export const getSubmittedFormById = async (submitFormId) => {
+  try {
+    console.log(submitFormId)
+    let data = await db.collection("submit_form").doc(submitFormId).get();
+
+    console.log(data.data())
+    return { ...data.data()};
+  } catch (error) {
+    return null;
   }
 }

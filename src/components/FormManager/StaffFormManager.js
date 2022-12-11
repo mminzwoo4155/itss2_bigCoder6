@@ -19,7 +19,7 @@ const StaffFormManager = () => {
     getFormData.then((res) => setFormData(res));
   }, []);
   useEffect(() => {
-    console.log(formData);
+    // console.log(formData);
   }, [formData]);
   const columns = [
     {
@@ -70,7 +70,7 @@ const StaffFormManager = () => {
         <Table
           columns={columns}
           dataSource={formData.length > 0 ? formData : []}
-          rowKey={(item) => console.log('Here ' + item.id)}
+          // rowKey={(item) => console.log('Here ' + item.id)}
         />
         <ApproveFormModal isOpen={isOpenModal} setIsOpen={setIsOpenModal} id={toProcessFormId}/>
       </div>

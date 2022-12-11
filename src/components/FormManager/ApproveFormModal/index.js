@@ -1,13 +1,32 @@
 import { Modal } from "antd";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   approveForm,
-  disapproveForm
+  disapproveForm,
+  getSubmittedFormById
 } from "../../../firebase/firestore/formStorage";
 
 const ApproveFormModal = ({ isOpen, setIsOpen , id}) => {
+  // console.log(id)
+  const [formData, setFormData] = useState();
+  useEffect(() => {
+    console.log(id)
+    const getFormData = getSubmittedFormById(id)
+    getFormData.then((res) => setFormData(res))
+  }, [])
+
+  useEffect(() => {
+    console.log(formData)
+  }, [formData])
+  
+  const detailText = JSON.stringify(formData)
+
   const handleCancel = () => {
-    console.log(disapproveForm(id));
+    // console.log(detailObject.status)
+    // if(detailObject.status === 1) return;
+    disapproveForm(id).then(() => {
+      alert('Disapproved successful!')
+    });
     setIsOpen(false);
   };
   const handleOK = () => {
@@ -23,7 +42,7 @@ const ApproveFormModal = ({ isOpen, setIsOpen , id}) => {
       cancelText={'Disapprove'}
       title="Duyệt yêu cầu"
     >
-      DETAIL
+      {detailText}
     </Modal>
   );
 };
