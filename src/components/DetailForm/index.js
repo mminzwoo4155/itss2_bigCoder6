@@ -5,10 +5,8 @@ import { Button, Form, Col, Row, Input, notification } from "antd";
 import "./index.css";
 import { DownloadOutlined } from "@ant-design/icons";
 
-import { getFormById } from "../../firebase/firestore/formStorage";
-import RadioGroup from "./RadioGroup";
+import { getFormById, submitForm } from "../../firebase/firestore/formStorage";
 import Question from "./Question";
-// const { Meta } = Card;
 
 const profileArgs = [
   {
@@ -35,14 +33,13 @@ const profileArgs = [
 
 const DetailForm = () => {
   const history = useHistory();
-  const { currentProfile } = useAuth();
+  const { currentUser, currentProfile } = useAuth();
   const id = history.location.pathname.split("/")[2];
   const [data1, setData] = useState({});
 
   useEffect(() => {
     const getForm = getFormById(id);
     getForm.then((res) => {
-      console.log(res);
       setData(res);
     });
   }, []);
@@ -58,13 +55,22 @@ const DetailForm = () => {
       form.setFieldsValue(values);
     } catch (error) {
       notification.error({
-        message: "Auto fill failed"
+        message: "Điền tự động thất bại. Profile cần được cập nhật",
       });
     }
   }
 
-  const handleFormSubmit = (val) => {
-    console.log(val);
+  const handleFormSubmit = async (data) => {
+    try {
+      await submitForm(currentUser.email, id, data);
+      notification.success({
+        message: 'Gửi đơn thành công',
+      });
+    } catch (error) {
+      notification.error({
+        message: 'Đã có lỗi xảy ra: ' + error.message,
+      });
+    }
   };
 
   return (
@@ -102,7 +108,6 @@ const DetailForm = () => {
             ))}
             {data1?.fields?.map((item, index) => (
               <Form.Item label={item?.Question} key={index} name={item?.key}>
-                {/* <RadioGroup options={item?.options} /> */}
                 <Question itemData={item}/>
               </Form.Item>
             ))}

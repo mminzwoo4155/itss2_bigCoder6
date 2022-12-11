@@ -22,16 +22,6 @@ const Signup = () => {
       try {
         await signup(val.email, val.password);
         history.push("/");
-        // const profile = {
-        //   email: val.email,
-        //   name: '',
-        //   specialized: '',
-        //   id: '',
-        //   studentId: '',
-        //   phoneNumber: '', 
-        // }
-        // const jsonProfile = JSON.stringify(profile)
-        // localStorage.setItem('profile', jsonProfile)
       } catch(e) {
         notification.error({
           message: "Registry Error",
