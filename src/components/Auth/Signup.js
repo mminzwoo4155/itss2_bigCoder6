@@ -3,7 +3,12 @@ import { useAuth } from "../../contexts/AuthContext";
 import { Link, useHistory } from "react-router-dom";
 import { Form, Button, Input, Typography, Row, notification } from "antd";
 import "./index.css";
+import { registerNewProfile } from "../../firebase/firestore/userStorage";
+
+
 const { Title } = Typography;
+const defaultRole = 'student';
+
 const Signup = () => {
   const [form] = Form.useForm();
   const { signup } = useAuth();
@@ -21,6 +26,7 @@ const Signup = () => {
     if(val.cfpassword === val.password){
       try {
         await signup(val.email, val.password);
+        await registerNewProfile(val.email, defaultRole);
         history.push("/");
       } catch(e) {
         notification.error({
