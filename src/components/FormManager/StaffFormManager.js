@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./index.css";
-import { Table } from "antd";
+import { Table, Tag } from "antd";
 import { dataForm } from "./../../mock/formManager";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import {
@@ -12,15 +12,26 @@ import ApproveFormModal from "./ApproveFormModal";
 
 const StaffFormManager = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState([]);
-  const [toProcessFormId, setToProcessFormId] = useState('');
+  const [toProcessFormId, setToProcessFormId] = useState("");
+  async function getData() {
+    setLoading(true);
+    try {
+      const formData = await getAllSubmittedForm();
+      console.log(formData);
+      setFormData(formData);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  }
   useEffect(() => {
-    const getFormData = getAllSubmittedForm();
-    getFormData.then((res) => setFormData(res));
+    getData();
   }, []);
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
+  // useEffect(() => {
+  //   console.log(formData);
+  // }, [formData]);
   const columns = [
     {
       title: "STT",
@@ -43,7 +54,21 @@ const StaffFormManager = () => {
     {
       title: "Trạng thái",
       render: (_, record) => (
-        <>{record?.status === 1 ? "Đã duyệt" : "Chưa duyệt"}</>
+        <Tag
+          color={
+            record?.status === 1
+              ? "green"
+              : record?.status === 2
+              ? "red"
+              : "gray"
+          }
+        >
+          {record?.status === 1
+            ? "Đã duyệt"
+            : record?.status === 2
+            ? "Không duyệt"
+            : "Chưa duyệt"}
+        </Tag>
       ),
     },
     {
@@ -52,12 +77,12 @@ const StaffFormManager = () => {
       render: (_, record) => (
         <>
           {" "}
-          <EyeOutlined onClick={
-            () => {
-              setIsOpenModal(true)
-              setToProcessFormId(record.id)
-              }
-          } />
+          <EyeOutlined
+            onClick={() => {
+              setIsOpenModal(true);
+              setToProcessFormId(record?.id);
+            }}
+          />
         </>
       ),
     },
@@ -69,10 +94,16 @@ const StaffFormManager = () => {
         <div className="title">Quản lý đơn từ</div>
         <Table
           columns={columns}
-          dataSource={formData.length > 0 ? formData : []}
-          rowKey={(item) => console.log('Here ' + item.id)}
+          dataSource={formData}
+          loading={loading}
+          rowKey={(item) => item?.id}
         />
-        <ApproveFormModal isOpen={isOpenModal} setIsOpen={setIsOpenModal} id={toProcessFormId}/>
+        <ApproveFormModal
+          isOpen={isOpenModal}
+          setIsOpen={setIsOpenModal}
+          id={toProcessFormId}
+          getData={getData}
+        />
       </div>
     </>
   );

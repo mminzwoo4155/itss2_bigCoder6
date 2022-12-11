@@ -58,27 +58,27 @@ export const submitForm = async (submitEmail, formId, data) => {
     form_id: formId,
     answers: data,
     status: 0,
-    timestamp: firebase.firestore.Timestamp.fromDate(new Date())
-  }
+    timestamp: firebase.firestore.Timestamp.fromDate(new Date()),
+  };
   await db.collection("submit_form").doc().set(docData);
-}
+};
 
 export const approveForm = async (submitFormId) => {
-  const update = {status: 1}
+  const update = { status: 1 };
   try {
-    db.collection("submit_form").doc(submitFormId).update(update);
-    return 'Approved';
+    await db.collection("submit_form").doc(submitFormId).update(update);
+    return "Approved";
   } catch (e) {
-    return 'Approve error'
+    return "Approve error";
   }
-}
+};
 
 export const disapproveForm = async (submitFormId) => {
-  const update = {status: 0}
+  const update = { status: 2 };
   try {
-    db.collection("submit_form").doc(submitFormId).update(update);
-    return 'Disapproved';
+    await db.collection("submit_form").doc(submitFormId).update(update);
+    return "Disapproved";
   } catch (e) {
-    return 'Disapprove error'
+    return "Disapprove error";
   }
-}
+};
