@@ -73,8 +73,8 @@ export const approveForm = async (submitFormId) => {
   }
 };
 
-export const disapproveForm = async (submitFormId) => {
-  const update = { status: 2 };
+export const disapproveForm = async (submitFormId, msg) => {
+  const update = { status: 2, message: msg };
   try {
     await db.collection("submit_form").doc(submitFormId).update(update);
     return "Disapproved";
@@ -86,7 +86,8 @@ export const disapproveForm = async (submitFormId) => {
 export const getSubmittedFormById = async (submitFormId) => {
   try {
     let data = await db.collection("submit_form").doc(submitFormId).get();
-    return { ...data.data() };
+    let formData = await getFormById(data.data().form_id);
+    return { ...data.data(), form: formData };
   } catch (error) {
     return null;
   }
