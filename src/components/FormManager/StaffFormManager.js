@@ -9,12 +9,16 @@ import {
 } from "../../firebase/firestore/formStorage";
 import { useAuth } from "../../contexts/AuthContext";
 import ApproveFormModal from "./ApproveFormModal";
+import useSubmitForm from "../../hook/submitFormStorage";
 
 const StaffFormManager = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState([]);
   const [currentTab, setCurrentTab] = useState("-1");
+
+  const [formData1] = useSubmitForm();
+  console.log(formData1);
   
   const [toProcessFormId, setToProcessFormId] = useState("");
   async function getData() {

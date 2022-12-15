@@ -2,6 +2,7 @@ import { Modal, notification, Button, Form, Input } from "antd";
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useAuth } from "../../../contexts/AuthContext";
 import {
   approveForm,
   disapproveForm,
@@ -15,6 +16,7 @@ const { TextArea } = Input;
 const ApproveFormModal = ({ isOpen, setIsOpen, id, getData }) => {
   const [detail, setDetail] = useState();
   const [msgStatus, setStatus] = useState();
+  const { currentProfile } = useAuth();
   useEffect(() => {
     setStatus({
       status: '',
@@ -28,24 +30,27 @@ const ApproveFormModal = ({ isOpen, setIsOpen, id, getData }) => {
   }, [id]);
 
   const handleCancel = () => {
-    const message = form.getFieldValue('message');
-    if(!message){
-      setStatus({
-        status: 'error',
-        message: 'Cần nêu rõ lý do từ chối đơn',
-      });
-      return;
+    var message = "";
+    if(currentProfile.role === 'staff'){
+      message = form.getFieldValue('message');
+      if(!message){
+        setStatus({
+          status: 'error',
+          message: 'Cần nêu rõ lý do từ chối đơn',
+        });
+        return;
+      }
     }
     disapproveForm(id, message)
       .then(() => {
         notification.success({
-          message: "Success disapprove form",
+          message: "Từ chối đơn thành công",
         });
         getData();
       })
       .catch(() => {
         notification.error({
-          message: "Error",
+          message: "Đã có lỗi xảy ra",
         });
       });
     setIsOpen(false);
@@ -54,14 +59,14 @@ const ApproveFormModal = ({ isOpen, setIsOpen, id, getData }) => {
     approveForm(id)
       .then(() => {
         notification.success({
-          message: "Success approve form",
+          message: "Duyệt đơn thành công",
         });
 
         getData();
       })
       .catch(() => {
         notification.error({
-          message: "Error",
+          message: "Đã có lỗi xảy ra",
         });
       });
     setIsOpen(false);
@@ -78,31 +83,48 @@ const ApproveFormModal = ({ isOpen, setIsOpen, id, getData }) => {
       okText={"Approve"}
       cancelText={"Disapprove"}
       title="Duyệt yêu cầu"
-      footer={detail?.status === 0 ? [
-        <Button key={1} danger ghost onClick={handleCancel}>
+      footer={
+        detail?.status === 0 ? 
+        currentProfile.role === 'staff'?
+        [<Button key={1} danger ghost onClick={handleCancel}>
           Từ chối
         </Button>,
         <Button key={2} type="primary" onClick={handleOK}>
           Duyệt
-        </Button>,
-      ] : []}
+        </Button>,] 
+        : [<Button key={1} danger ghost onClick={handleCancel}>
+          Từ chối
+        </Button>]
+        : []
+      }
     >
       <div>
         <p><strong>Yêu cầu: </strong>{detail?.form.title}</p>
         <p style={{textAlign: "center"}}><strong>Thông tin sinh viên</strong></p>
-        <p><strong>Khoa: </strong>{answer?.course}</p>
         <p><strong>Họ và tên: </strong>{answer?.name}</p>
         <p><strong>Mã số sinh viên: </strong>{answer?.student_id}</p>
         <p><strong>Trường: </strong>{answer?.school}</p>
+        <p><strong>Khoa: </strong>{answer?.course}</p>
         <p><strong>Niên khóa: </strong>{answer?.year}</p>
         <p style={{textAlign: "center"}}><strong>Câu trả lời</strong></p>
         {detail?.form.fields.map((field) => {
-          const fieldAnswer = field.options.filter(item => item.value.toString() === answer[field.key].toString());
-          return (
-            <p><strong>{field.Question}: </strong>{fieldAnswer[0]?.label}</p>
-          )
+          switch(field.type){
+            case 'choice': 
+              const fieldAnswer = field.options.filter(item => item.value.toString() === answer[field.key].toString());
+              return (
+                <p><strong>{field.Question}: </strong>{fieldAnswer[0]?.label}</p>
+              )
+            case 'text':
+              return (
+                <p><strong>{field.Question}: </strong>{answer[field.key]}</p>
+              )
+            default: 
+              return null;
+          }
         })}
-        {detail?.status === 0 ? 
+        {currentProfile.role === 'student'? 
+          null 
+          : detail?.status === 0 ? 
           <Form form={form} layout='vertical'>
             <Form.Item 
               label='Lời nhắn'
