@@ -1,39 +1,21 @@
 import React, { useEffect, useState } from "react";
 import "./index.css";
 import { Table, Tabs, Tag } from "antd";
-import { dataForm } from "./../../mock/formManager";
-import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
-import {
-  getAllSubmittedForm,
-  getSubmittedFormByEmail,
-} from "../../firebase/firestore/formStorage";
-import { useAuth } from "../../contexts/AuthContext";
+import { EyeOutlined } from "@ant-design/icons";
 import ApproveFormModal from "./ApproveFormModal";
 import useSubmitForm from "../../hook/submitFormStorage";
 
 const StaffFormManager = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [formData, setFormData] = useState([]);
   const [currentTab, setCurrentTab] = useState("-1");
 
-  const [formData1] = useSubmitForm();
-  console.log(formData1);
+  const [formData] = useSubmitForm();
   
   const [toProcessFormId, setToProcessFormId] = useState("");
-  async function getData() {
-    setLoading(true);
-    try {
-      const formData = await getAllSubmittedForm();
-      console.log(formData);
-      setFormData(formData);
-      setLoading(false);
-    } catch (err) {
-      console.log(err);
-    }
-  }
+
   useEffect(() => {
-    getData();
+    setLoading(false);
   }, []);
 
   const getTabData = () => {
@@ -146,7 +128,8 @@ const StaffFormManager = () => {
           isOpen={isOpenModal}
           setIsOpen={setIsOpenModal}
           id={toProcessFormId}
-          getData={getData}
+          // getData={getData}
+          getData={() => {}}
         />
       </div>
     </>

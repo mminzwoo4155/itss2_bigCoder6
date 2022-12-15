@@ -1,61 +1,31 @@
 import React, { useEffect, useState } from "react";
 import "./index.css";
-import { dataForm } from "./../../mock/formManager";
 import { Table, Tabs, Tag } from "antd";
-import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
-import { useAuth } from "../../contexts/AuthContext";
+import { EyeOutlined } from "@ant-design/icons";
 import ApproveFormModal from "./ApproveFormModal";
-
-import {
-  getAllSubmittedForm,
-  getSubmittedFormByEmail,
-} from "../../firebase/firestore/formStorage";
 import useSubmitForm from "../../hook/submitFormStorage";
 
 const StudentFormManager = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const { currentUser } = useAuth();
   const [loading, setLoading] = useState(true);
-  const [formData, setFormData] = useState([]);
   const [toProcessFormId, setToProcessFormId] = useState("");
   const [currentTab, setCurrentTab] = useState("-1");
 
-  async function getData() {
-    setLoading(true);
-    try {
-      const formData = await getSubmittedFormByEmail(currentUser.email);
-      console.log(formData);
-      setFormData(formData);
-      setLoading(false);
-    } catch (err) {
-      console.log(err);
-    }
-  }
   useEffect(() => {
-    getData();
+    setLoading(false);
   }, []);
 
   const [formData1] = useSubmitForm();
-  console.log(formData1);
 
   const getTabData = () => {
     if(currentTab === "-1"){
-      return { tabData : formData }
+      return { tabData : formData1 }
     }
-    const data = formData.filter(record => record.status.toString() === currentTab);
+    const data = formData1.filter(record => record.status.toString() === currentTab);
     return { tabData : data }
   };
 
   const { tabData } = getTabData();
-
-  // useEffect(() => {
-  //   const getFormData = getAllSubmittedForm();
-  //   getFormData.then((res) => setFormData(res));
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log(formData);
-  // }, [formData]);
 
   const columns = [
     {
@@ -153,7 +123,8 @@ const StudentFormManager = () => {
           isOpen={isOpenModal}
           setIsOpen={setIsOpenModal}
           id={toProcessFormId}
-          getData={getData}
+          // getData={getData}
+          getData={() => {}}
         />
       </div>
     </>
