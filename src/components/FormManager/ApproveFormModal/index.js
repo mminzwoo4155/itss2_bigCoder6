@@ -7,8 +7,6 @@ import {
   approveForm,
   disapproveForm,
   getSubmittedFormById,
-  getFormById,
-  getQuestionById
 } from "../../../firebase/firestore/formStorage";
 
 const { TextArea } = Input;
@@ -46,7 +44,7 @@ const ApproveFormModal = ({ isOpen, setIsOpen, id, getData }) => {
         notification.success({
           message: "Từ chối đơn thành công",
         });
-        getData();
+        //getData();
       })
       .catch(() => {
         notification.error({
@@ -62,7 +60,7 @@ const ApproveFormModal = ({ isOpen, setIsOpen, id, getData }) => {
           message: "Duyệt đơn thành công",
         });
 
-        getData();
+        //getData();
       })
       .catch(() => {
         notification.error({
