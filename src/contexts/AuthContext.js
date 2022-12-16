@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
-import { auth } from "../firebase";
-import { getUserByEmail } from "../firebase/firestore/userStorage";
+import { auth, db } from "../firebase";
+import { getUserByEmail, updateUserProfile } from "../firebase/firestore/userStorage";
 
 const AuthContext = React.createContext();
 
@@ -37,17 +37,21 @@ export function AuthProvider({ children }) {
     return currentUser.updatePassword(password);
   }
 
+  async function updateProfile(profile) {
+    await updateUserProfile(currentUser.email, profile);
+    setProfile(profile);
+  }
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
       if(user){
-        // set profile here
         getUserByEmail(user.email).then(res => setProfile(res));
       }
       setLoading(false);
     });
 
-    return unsubscribe;
+    return () => unsubscribe();
   }, []);
 
   const value = {
@@ -59,6 +63,7 @@ export function AuthProvider({ children }) {
     resetPassword,
     updateEmail,
     updatePassword,
+    updateProfile,
   };
 
   return (

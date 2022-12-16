@@ -38,14 +38,14 @@ const Profile = () => {
           <div className="info-detail">
 
             <div className="left">
-              <p><b>メールアドレス:</b></p>
-              <p><b>学部:</b></p>
-              <p><b>証明番号:</b></p>
-              <p><b>学籍番号:</b></p>
-              <p><b>電話番号:</b></p>
+              <p><b>Email</b></p>
+              <p><b>Khoa</b></p>
+              <p><b>Số chứng minh</b></p>
+              <p><b>Mã số sinh viên</b></p>
+              <p><b>Số điện thoại</b></p>
               <p style={{ fontSize: 15 }}>
                 <b>
-                  <Link to={`/forgot-password`}>パスワード変更？</Link>
+                  <Link to={`/forgot-password`}>Thay đổi mật khẩu?</Link>
                 </b>
               </p>
             </div>
@@ -55,12 +55,12 @@ const Profile = () => {
               <p><input disabled defaultValue={currentProfile.course || 'N/A'}></input></p>
               <p><input disabled defaultValue={currentProfile.id || 'N/A'}></input></p>
               <p><input disabled defaultValue={currentProfile.student_id || 'N/A'}></input></p>
-              <p><input disabled defaultValue={currentProfile.phoneNumber || 'N/A'}></input></p>
+              <p><input disabled defaultValue={currentProfile.phone_number || 'N/A'}></input></p>
             </div>
           </div>
 
           <div className="button">
-            <button>保存</button>
+            <button>Xác nhận</button>
           </div>
         </Layout>
       </Layout>

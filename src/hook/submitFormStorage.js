@@ -12,7 +12,7 @@ const useSubmitForm = () => {
             });
             setSubmitForms(forms);
         });
-        return unsubcribe;
+        return () => unsubcribe();
     }, []);
 
     return [submitForms];
