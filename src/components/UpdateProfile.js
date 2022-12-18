@@ -1,50 +1,49 @@
-import React, { useRef, useState } from "react"
-import { Form, Button, Card, Alert } from "react-bootstrap"
-import { useAuth } from "../contexts/AuthContext"
-import { Link, useHistory } from "react-router-dom"
+import React, { useRef, useState } from "react";
+import { Form, Button, Card, Alert } from "react-bootstrap";
+import { useAuth } from "../contexts/AuthContext";
+import { Link, useHistory } from "react-router-dom";
 
 export default function UpdateProfile() {
-  const emailRef = useRef()
+  const emailRef = useRef();
   // const passwordRef = useRef()
   // const passwordConfirmRef = useRef()
-  const nameRef = useRef()
-  const specializedRef = useRef()
-  const idRef = useRef()
-  const stdIdRef = useRef()
-  const phoneRef = useRef()
-  const { currentUser, updateEmail } = useAuth()
-  const [error, setError] = useState("")
-  const [profile, setProfile] = useState('')
-  const [loading, setLoading] = useState(false)
-  const history = useHistory()
+  const nameRef = useRef();
+  const specializedRef = useRef();
+  const idRef = useRef();
+  const stdIdRef = useRef();
+  const phoneRef = useRef();
+  const { currentUser, updateEmail } = useAuth();
+  const [error, setError] = useState("");
+  const [profile, setProfile] = useState("");
+  const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   function isPhoneNumber(str) {
-    if (typeof str != 'string' || str.length !== 10) return false 
-    return !isNaN(str) && !isNaN(parseFloat(str)) 
+    if (typeof str != "string" || str.length !== 10) return false;
+    return !isNaN(str) && !isNaN(parseFloat(str));
   }
 
   function handleSubmit(e) {
-    
-    e.preventDefault()
+    e.preventDefault();
 
     if (idRef.current.value.length !== 12) {
-      return setError('Invalid id')
+      return setError("Invalid id");
     }
 
     if (stdIdRef.current.value.length !== 8) {
-      return setError('Invalid student id')
+      return setError("Invalid student id");
     }
 
     if (!isPhoneNumber(phoneRef.current.value)) {
-      return setError('Invalid phone number')
+      return setError("Invalid phone number");
     }
 
-    const promises = []
-    setLoading(true)
-    setError("")
+    const promises = [];
+    setLoading(true);
+    setError("");
 
     if (emailRef.current.value !== currentUser.email) {
-      promises.push(updateEmail(emailRef.current.value))
+      promises.push(updateEmail(emailRef.current.value));
     }
 
     const profile = {
@@ -53,30 +52,35 @@ export default function UpdateProfile() {
       specialized: specializedRef.current.value,
       id: idRef.current.value,
       studentId: stdIdRef.current.value,
-      phoneNumber: phoneRef.current.value 
-    }
+      phoneNumber: phoneRef.current.value,
+    };
 
-    setProfile(profile)
+    setProfile(profile);
 
-    const jsonProfile = JSON.stringify(profile)
-    localStorage.setItem('profile', jsonProfile)
+    const jsonProfile = JSON.stringify(profile);
+    localStorage.setItem("profile", jsonProfile);
 
     Promise.all(promises)
       .then(() => {
-        history.push(`/profile/${currentUser.uid}`)
-        alert('Update successful')
+        history.push(`/profile/${currentUser.uid}`);
+        alert("Update successful");
       })
       .catch(() => {
-        setError("Failed to update account")
+        setError("Failed to update account");
       })
       .finally(() => {
-        setLoading(false)
-      })
+        setLoading(false);
+      });
   }
 
   return (
     <>
-      <Card>
+      <Card
+        style={{
+          width: "50%",
+          margin: "auto",
+        }}
+      >
         <Card.Body>
           <h2 className="text-center mb-4">Update Profile</h2>
           {error && <Alert variant="danger">{error}</Alert>}
@@ -141,5 +145,5 @@ export default function UpdateProfile() {
         <Link to="/">Cancel</Link>
       </div>
     </>
-  )
+  );
 }
