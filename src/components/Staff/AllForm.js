@@ -4,10 +4,12 @@ import { useState } from "react";
 import { Button, Row, Table } from "antd";
 import { EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import AddFormModal from "./AddFormModal";
+import { useHistory } from "react-router-dom";
 const AllForm = () => {
   const [forms] = useFormStorage();
   const [query, putQuery] = useState("");
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const history = useHistory();
   const getData = () => {
     let formList = forms;
     if (query) {
@@ -43,7 +45,9 @@ const AllForm = () => {
           style={{
             cursor: "pointer",
           }}
-          onClick={() => setIsOpenModal(true)}
+          onClick={() => {
+            history.push(`form/${record?.id}`);
+          }}
         />
       ),
     },
