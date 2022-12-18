@@ -19,3 +19,10 @@ export const registerNewProfile = async (userEmail, role) => {
     };
     await db.collection("users").doc().set(docData);
 }
+
+export const updateUserProfile = async (userEmail, profile) => {
+    // const querySnapshot = await db.collection("users").where("email", "==", userEmail).get();
+    // const profileId = querySnapshot.docs[0]?.id;
+    // console.log(profileId, profile)
+    await db.collection("users").doc(profile.id).update(profile);
+}

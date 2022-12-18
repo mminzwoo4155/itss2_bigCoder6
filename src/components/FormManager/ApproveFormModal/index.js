@@ -1,39 +1,54 @@
-import { Modal, notification, Button } from "antd";
+import { Modal, notification, Button, Form, Input } from "antd";
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useAuth } from "../../../contexts/AuthContext";
 import {
   approveForm,
   disapproveForm,
   getSubmittedFormById,
-  getFormById,
-  getQuestionById
 } from "../../../firebase/firestore/formStorage";
+
+const { TextArea } = Input;
 
 const ApproveFormModal = ({ isOpen, setIsOpen, id, getData }) => {
   const [detail, setDetail] = useState();
-  // const [question, setQuestion] = useState();
+  const [msgStatus, setStatus] = useState();
+  const { currentProfile } = useAuth();
   useEffect(() => {
+    setStatus({
+      status: '',
+      message: '',
+    })
     const data = getSubmittedFormById(id);
     data.then((res) => {
+      console.log(res);
       setDetail(res);
     });
-    // data.then((res) => {
-    //   console.log(res);
-    // });
   }, [id]);
 
   const handleCancel = () => {
-    disapproveForm(id)
+    var message = "";
+    if(currentProfile.role === 'staff'){
+      message = form.getFieldValue('message');
+      if(!message){
+        setStatus({
+          status: 'error',
+          message: 'Cần nêu rõ lý do từ chối đơn',
+        });
+        return;
+      }
+    }
+    disapproveForm(id, message)
       .then(() => {
         notification.success({
-          message: "Success disapprove form",
+          message: "Từ chối đơn thành công",
         });
-        getData();
+        //getData();
       })
       .catch(() => {
         notification.error({
-          message: "Error",
+          message: "Đã có lỗi xảy ra",
         });
       });
     setIsOpen(false);
@@ -42,29 +57,21 @@ const ApproveFormModal = ({ isOpen, setIsOpen, id, getData }) => {
     approveForm(id)
       .then(() => {
         notification.success({
-          message: "Success approve form",
+          message: "Duyệt đơn thành công",
         });
 
-        getData();
+        //getData();
       })
       .catch(() => {
         notification.error({
-          message: "Error",
+          message: "Đã có lỗi xảy ra",
         });
       });
     setIsOpen(false);
   };
-  const answer = detail?.answers
-  // console.log(detail?.form_id)
-  // useEffect(() => {
-  //   const data = getQuestionById(detail?.form_id);
-  //   data.then((res) => {
-  //     setQuestion(res);
-  //   });
-  //   data.then((res) => {
-  //     console.log(res);
-  //   });
-  // }, [id]);
+  const answer = detail?.answers;
+
+  const [form] = Form.useForm();
 
   return (
     <Modal
@@ -74,23 +81,59 @@ const ApproveFormModal = ({ isOpen, setIsOpen, id, getData }) => {
       okText={"Approve"}
       cancelText={"Disapprove"}
       title="Duyệt yêu cầu"
-      footer={[
-        <Button key={1} danger ghost onClick={handleCancel}>
-          Reject
+      footer={
+        detail?.status === 0 ? 
+        currentProfile.role === 'staff'?
+        [<Button key={1} danger ghost onClick={handleCancel}>
+          Từ chối
         </Button>,
         <Button key={2} type="primary" onClick={handleOK}>
-          Approve
-        </Button>,
-      ]}
+          Duyệt
+        </Button>,] 
+        : [<Button key={1} danger ghost onClick={handleCancel}>
+          Từ chối
+        </Button>]
+        : []
+      }
     >
       <div>
-        <p><strong>Course: </strong>{answer?.course}</p>
-        <p><strong>Name: </strong>{answer?.name}</p>
-        <p><strong>Student id: </strong>{answer?.student_id}</p>
-        <p><strong>Tình trạng thẻ: </strong>{answer?.question1}</p>
-        <p><strong>Lý do làm thẻ: </strong>{answer?.question2}</p>
-        <p><strong>School: </strong>{answer?.school}</p>
-        <p><strong>Year: </strong>{answer?.year}</p>
+        <p><strong>Yêu cầu: </strong>{detail?.form.title}</p>
+        <p style={{textAlign: "center"}}><strong>Thông tin sinh viên</strong></p>
+        <p><strong>Họ và tên: </strong>{answer?.name}</p>
+        <p><strong>Mã số sinh viên: </strong>{answer?.student_id}</p>
+        <p><strong>Trường: </strong>{answer?.school}</p>
+        <p><strong>Khoa: </strong>{answer?.course}</p>
+        <p><strong>Niên khóa: </strong>{answer?.year}</p>
+        <p style={{textAlign: "center"}}><strong>Câu trả lời</strong></p>
+        {detail?.form.fields.map((field) => {
+          switch(field.type){
+            case 'choice': 
+              const fieldAnswer = field.options.filter(item => item.value.toString() === answer[field.key].toString());
+              return (
+                <p><strong>{field.Question}: </strong>{fieldAnswer[0]?.label}</p>
+              )
+            case 'text':
+              return (
+                <p><strong>{field.Question}: </strong>{answer[field.key]}</p>
+              )
+            default: 
+              return null;
+          }
+        })}
+        {currentProfile.role === 'student'? 
+          null 
+          : detail?.status === 0 ? 
+          <Form form={form} layout='vertical'>
+            <Form.Item 
+              label='Lời nhắn'
+              key='message' 
+              name='message'
+              validateStatus={msgStatus?.status}
+              help={msgStatus?.message}>
+              <TextArea rows={3}/>
+            </Form.Item>
+          </Form> 
+          : null}
       </div>
     </Modal>
   );

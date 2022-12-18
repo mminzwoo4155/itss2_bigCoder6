@@ -1,29 +1,31 @@
 import React, { useEffect, useState } from "react";
 import "./index.css";
-import { dataForm } from "./../../mock/formManager";
-import { Table } from "antd";
-import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
-import { useAuth } from "../../contexts/AuthContext";
+import { Table, Tabs, Tag } from "antd";
+import { EyeOutlined } from "@ant-design/icons";
 import ApproveFormModal from "./ApproveFormModal";
-
-import {
-  getAllSubmittedForm,
-  getSubmittedFormByEmail,
-} from "../../firebase/firestore/formStorage";
+import useSubmitForm from "../../hook/submitFormStorage";
 
 const StudentFormManager = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [formData, setFormData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [toProcessFormId, setToProcessFormId] = useState("");
+  const [currentTab, setCurrentTab] = useState("-1");
 
   useEffect(() => {
-    const getFormData = getAllSubmittedForm();
-    getFormData.then((res) => setFormData(res));
+    setLoading(false);
   }, []);
 
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
+  const [formData1] = useSubmitForm();
+
+  const getTabData = () => {
+    if(currentTab === "-1"){
+      return { tabData : formData1 }
+    }
+    const data = formData1.filter(record => record.status.toString() === currentTab);
+    return { tabData : data }
+  };
+
+  const { tabData } = getTabData();
 
   const columns = [
     {
@@ -33,21 +35,36 @@ const StudentFormManager = () => {
       render: (_, record, index) => <>{index + 1}</>,
     },
     {
-      title: "Người tạo đơn",
-      dataIndex: "student",
-    },
-    {
       title: "Thời gian tạo đơn",
-      // render: (_, record) => <>{record?.timestamp}</>,
+      render: (_, record) => {
+        const submitDate = new Date(record?.timestamp.seconds);
+        return (
+          <>{submitDate.toLocaleString()}</>
+        )
+      }
     },
     {
       title: "Lời nhắn từ hệ thống",
-      dataIndex: "",
+      dataIndex: "message",
     },
     {
       title: "Trạng thái",
       render: (_, record) => (
-        <>{record?.status === 1 ? "Đã duyệt" : "Chưa duyệt"}</>
+        <Tag
+          color={
+            record?.status === 1
+              ? "green"
+              : record?.status === 2
+              ? "red"
+              : "gray"
+          }
+        >
+          {record?.status === 1
+            ? "Đã duyệt"
+            : record?.status === 2
+            ? "Không duyệt"
+            : "Chưa duyệt"}
+        </Tag>
       ),
     },
     {
@@ -67,19 +84,47 @@ const StudentFormManager = () => {
     },
   ];
 
+  const tabs = [
+    {
+      key: "-1",
+      label: "Tất cả",
+    },
+    {
+      key: "0",
+      label: "Đang chờ xử lý",
+    },
+    {
+      key: "1",
+      label: "Đã duyệt",
+    },
+    {
+      key: "2",
+      label: "Đã từ chối",
+    },
+  ]
+
   return (
     <>
       <div className="form">
         <div className="title">Quản lý đơn từ</div>
+        <Tabs
+          defaultActiveKey="-1"
+          centered
+          items={tabs}
+          onChange={(activeKey) => setCurrentTab(activeKey)}
+        />
         <Table
           columns={columns}
-          dataSource={formData.length > 0 ? formData : []}
-          rowKey={(item) => console.log("Here " + item.id)}
+          dataSource={tabData}
+          loading={loading}
+          rowKey={(item) => item?.id}
         />
         <ApproveFormModal
           isOpen={isOpenModal}
           setIsOpen={setIsOpenModal}
-          // id={toProcessFormId}
+          id={toProcessFormId}
+          // getData={getData}
+          getData={() => {}}
         />
       </div>
     </>

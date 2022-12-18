@@ -1,7 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useReducer, useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useHistory } from "react-router-dom";
+import { notification } from "antd";
 
 export default function UpdateProfile() {
   const emailRef = useRef();
@@ -12,9 +13,11 @@ export default function UpdateProfile() {
   const idRef = useRef();
   const stdIdRef = useRef();
   const phoneRef = useRef();
-  const { currentUser, updateEmail } = useAuth();
+  const schoolRef = useRef();
+  const yearRef = useRef();
+  const { currentUser, currentProfile, updateEmail, updateProfile } = useAuth();
   const [error, setError] = useState("");
-  const [profile, setProfile] = useState("");
+  // const [profile, setProfile] = useState('')
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
@@ -26,11 +29,14 @@ export default function UpdateProfile() {
   function handleSubmit(e) {
     e.preventDefault();
 
-    if (idRef.current.value.length !== 12) {
-      return setError("Invalid id");
-    }
+    // if (idRef.current.value.length !== 12) {
+    //   return setError('Invalid id')
+    // }
 
-    if (stdIdRef.current.value.length !== 8) {
+    if (
+      stdIdRef.current.value.length !== 0 &&
+      stdIdRef.current.value.length !== 8
+    ) {
       return setError("Invalid student id");
     }
 
@@ -42,31 +48,44 @@ export default function UpdateProfile() {
     setLoading(true);
     setError("");
 
-    if (emailRef.current.value !== currentUser.email) {
-      promises.push(updateEmail(emailRef.current.value));
-    }
+    // if (emailRef.current.value !== currentUser.email) {
+    //   promises.push(updateEmail(emailRef.current.value))
+    // }
 
     const profile = {
-      email: emailRef.current.value,
+      email: currentUser.email,
       name: nameRef.current.value,
-      specialized: specializedRef.current.value,
-      id: idRef.current.value,
-      studentId: stdIdRef.current.value,
-      phoneNumber: phoneRef.current.value,
+      course: specializedRef.current.value,
+      id: currentProfile.id,
+      student_id: stdIdRef.current.value,
+      phone_number: phoneRef.current.value,
+      school: schoolRef.current.value,
+      year: yearRef.current.value,
     };
 
-    setProfile(profile);
+    console.log(profile);
 
-    const jsonProfile = JSON.stringify(profile);
-    localStorage.setItem("profile", jsonProfile);
+    // promises.push(updateProfile(currentUser.email, profile));
+
+    promises.push(updateProfile(profile));
+
+    // setProfile(profile)
+
+    // const jsonProfile = JSON.stringify(profile)
+    // localStorage.setItem('profile', jsonProfile)
 
     Promise.all(promises)
       .then(() => {
         history.push(`/profile/${currentUser.uid}`);
-        alert("Update successful");
+        notification.success({
+          message: "Cập nhật thành công",
+        });
       })
-      .catch(() => {
-        setError("Failed to update account");
+      .catch((e) => {
+        console.log(e);
+        notification.error({
+          message: "Đã có lỗi xảy ra",
+        });
       })
       .finally(() => {
         setLoading(false);
@@ -82,7 +101,7 @@ export default function UpdateProfile() {
         }}
       >
         <Card.Body>
-          <h2 className="text-center mb-4">Update Profile</h2>
+          <h2 className="text-center mb-4">Cập nhật thông tin</h2>
           {error && <Alert variant="danger">{error}</Alert>}
           <Form onSubmit={handleSubmit}>
             <Form.Group id="email">
@@ -91,24 +110,8 @@ export default function UpdateProfile() {
                 type="email"
                 ref={emailRef}
                 required
+                disabled
                 defaultValue={currentUser.email}
-              />
-            </Form.Group>
-            <Form.Group id="name">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="name"
-                ref={nameRef}
-                required
-                placeholder="Enter your name"
-              />
-            </Form.Group>
-            <Form.Group id="specialized">
-              <Form.Label>Specialized</Form.Label>
-              <Form.Control
-                type="specialized"
-                ref={specializedRef}
-                placeholder="Enter your specialized school here"
               />
             </Form.Group>
             <Form.Group id="identification-number">
@@ -116,33 +119,74 @@ export default function UpdateProfile() {
               <Form.Control
                 type="identification-number"
                 ref={idRef}
-                placeholder="Enter your identification number"
+                disabled
+                // placeholder="Enter your identification number"
+                defaultValue={currentProfile.id}
+              />
+            </Form.Group>
+            <Form.Group id="name">
+              <Form.Label>Họ và tên</Form.Label>
+              <Form.Control
+                type="name"
+                ref={nameRef}
+                required
+                placeholder="Nhập tên của bạn"
+                defaultValue={currentProfile.name}
+              />
+            </Form.Group>
+            <Form.Group id="specialized">
+              <Form.Label>Khoa</Form.Label>
+              <Form.Control
+                type="specialized"
+                ref={specializedRef}
+                placeholder="Nhập khoa bạn đang theo học"
+                defaultValue={currentProfile.course}
+              />
+            </Form.Group>
+            <Form.Group id="school">
+              <Form.Label>Trường</Form.Label>
+              <Form.Control
+                type="school"
+                ref={schoolRef}
+                placeholder="Điền trường bạn đang theo học"
+                defaultValue={currentProfile.school}
+              />
+            </Form.Group>
+            <Form.Group id="year">
+              <Form.Label>Niên khóa</Form.Label>
+              <Form.Control
+                type="year"
+                ref={yearRef}
+                placeholder="Điền niên khóa của bạn"
+                defaultValue={currentProfile.year}
               />
             </Form.Group>
             <Form.Group id="student-id">
-              <Form.Label>Student id</Form.Label>
+              <Form.Label>Mã số sinh viên</Form.Label>
               <Form.Control
                 type="student-id"
                 ref={stdIdRef}
-                placeholder="Enter your student id"
+                placeholder="Nhập mã số sinh viên"
+                defaultValue={currentProfile.student_id}
               />
             </Form.Group>
             <Form.Group id="phone-number">
-              <Form.Label>Phone number</Form.Label>
+              <Form.Label>Số điện thoại liên lạc</Form.Label>
               <Form.Control
                 type="phone-number"
                 ref={phoneRef}
-                placeholder="Enter your phone number"
+                placeholder="Nhập số điện thoại"
+                defaultValue={currentProfile.phone_number}
               />
             </Form.Group>
             <Button disabled={loading} className="w-100" type="submit">
-              Update
+              Xác nhận
             </Button>
           </Form>
         </Card.Body>
       </Card>
       <div className="w-100 text-center mt-2">
-        <Link to="/">Cancel</Link>
+        <Link to="/">Hủy</Link>
       </div>
     </>
   );
