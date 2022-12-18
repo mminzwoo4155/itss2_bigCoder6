@@ -7,6 +7,7 @@ import "./Profile.css";
 
 const Profile = () => {
   const { logout, currentUser, currentProfile } = useAuth();
+  console.log(currentProfile);
   const history = useHistory();
   // const profile = JSON.parse(localStorage.getItem('profile'))
 
@@ -30,19 +31,28 @@ const Profile = () => {
             </div>
             <div className="profile-name">
               <h3>
-                <b>名前</b>: {currentProfile.name || 'N/A'}
+                <b>名前</b>: {currentProfile?.displayName || "N/A"}
               </h3>
             </div>
           </div>
 
           <div className="info-detail">
-
             <div className="left">
-              <p><b>Email</b></p>
-              <p><b>Khoa</b></p>
-              <p><b>Số chứng minh</b></p>
-              <p><b>Mã số sinh viên</b></p>
-              <p><b>Số điện thoại</b></p>
+              <p>
+                <b>Email</b>
+              </p>
+              <p>
+                <b>Khoa</b>
+              </p>
+              <p>
+                <b>Số chứng minh</b>
+              </p>
+              <p>
+                <b>Mã số sinh viên</b>
+              </p>
+              <p>
+                <b>Số điện thoại</b>
+              </p>
               <p style={{ fontSize: 15 }}>
                 <b>
                   <Link to={`/forgot-password`}>Thay đổi mật khẩu?</Link>
@@ -51,11 +61,36 @@ const Profile = () => {
             </div>
 
             <div className="right">
-              <p><input disabled defaultValue={currentProfile.email || 'N/A'}></input></p>
-              <p><input disabled defaultValue={currentProfile.course || 'N/A'}></input></p>
-              <p><input disabled defaultValue={currentProfile.id || 'N/A'}></input></p>
-              <p><input disabled defaultValue={currentProfile.student_id || 'N/A'}></input></p>
-              <p><input disabled defaultValue={currentProfile.phone_number || 'N/A'}></input></p>
+              <p>
+                <input
+                  disabled
+                  defaultValue={currentProfile.email || "N/A"}
+                ></input>
+              </p>
+              <p>
+                <input
+                  disabled
+                  defaultValue={currentProfile.course || "N/A"}
+                ></input>
+              </p>
+              <p>
+                <input
+                  disabled
+                  defaultValue={currentProfile.id || "N/A"}
+                ></input>
+              </p>
+              <p>
+                <input
+                  disabled
+                  defaultValue={currentProfile.student_id || "N/A"}
+                ></input>
+              </p>
+              <p>
+                <input
+                  disabled
+                  defaultValue={currentProfile.phone_number || "N/A"}
+                ></input>
+              </p>
             </div>
           </div>
 

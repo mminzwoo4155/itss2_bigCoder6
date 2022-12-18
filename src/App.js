@@ -23,6 +23,7 @@ function App() {
           <PrivateRoute exact path="/" component={Homepage} />
           <PrivateRoute path="/update-profile" component={UpdateProfile} />
           <PrivateRoute path="/form/*" component={Homepage} />
+          <PrivateRoute path="/staff" component={Homepage} />
           <PrivateRoute path="/profile/:uid" component={Homepage} />
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />

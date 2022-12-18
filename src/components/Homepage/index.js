@@ -10,6 +10,7 @@ import MainContent from "../MainContent";
 import DetailForm from "../DetailForm";
 import FormManager from "../FormManager";
 import Profile from "../Profile/Profile";
+import Staff from "../Staff";
 
 const { Content, Header } = Layout;
 
@@ -42,7 +43,11 @@ const Homepage = () => {
               <Link to="/form-manager">Quản lý đơn từ</Link>
             </Menu.Item>
             <Menu.Item key="3">
-              <Link to="/">{currentProfile ? currentProfile.role : "N/A"}</Link>
+              <Link
+                to={currentProfile?.role === "staff" ? "/staff" : "student"}
+              >
+                {currentProfile ? currentProfile.role : "N/A"}
+              </Link>
             </Menu.Item>
           </Menu>
 
@@ -82,7 +87,7 @@ const Homepage = () => {
               <Route exact path="/form/*" component={DetailForm} />
               <Route path="/form-manager" component={FormManager} />
               <Route path="/profile/:uid" component={Profile} />
-              {/* <Route exact path="/student" component={Profile} /> */}
+              <Route exact path="/staff" component={Staff} />
             </Switch>
           </Content>
         </Layout>

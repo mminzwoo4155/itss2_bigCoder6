@@ -44,7 +44,7 @@ const MainContent = () => {
     setCurrentPage(page);
   };
   return (
-    <div>
+    <div className="main-content">
       <div className="title">Danh sách đơn</div>
       <Search query={query} onchange={handleSearch} />
       <FormList data={currentDisplayPage} />

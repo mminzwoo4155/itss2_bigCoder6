@@ -11,7 +11,7 @@ import Question from "./Question";
 const profileArgs = [
   {
     label: "Họ và tên",
-    key: "name"
+    key: "name",
   },
   {
     label: "Mã số sinh viên",
@@ -19,16 +19,16 @@ const profileArgs = [
   },
   {
     label: "Trường",
-    key: "school"
+    key: "school",
   },
   {
     label: "Khóa",
-    key: "year"
+    key: "year",
   },
   {
     label: "Khoa",
-    key: "course"
-  }
+    key: "course",
+  },
 ];
 
 const DetailForm = () => {
@@ -48,27 +48,27 @@ const DetailForm = () => {
 
   const handleAutoFill = () => {
     try {
-      var values = {}
-      profileArgs.forEach(item => {
+      var values = {};
+      profileArgs.forEach((item) => {
         values[item.key] = currentProfile[item.key];
-      })
+      });
       form.setFieldsValue(values);
     } catch (error) {
       notification.error({
         message: "Điền tự động thất bại. Profile cần được cập nhật",
       });
     }
-  }
+  };
 
   const handleFormSubmit = async (data) => {
     try {
       await submitForm(currentUser.email, id, data);
       notification.success({
-        message: 'Gửi đơn thành công',
+        message: "Gửi đơn thành công",
       });
     } catch (error) {
       notification.error({
-        message: 'Đã có lỗi xảy ra: ' + error.message,
+        message: "Đã có lỗi xảy ra: " + error.message,
       });
     }
   };
@@ -78,7 +78,7 @@ const DetailForm = () => {
       <Row>
         <Col span={8}>
           <h3>{data1.title}</h3>
-          <p className="form-description">{data1.full_description}</p>
+          <div className="form-description">{data1.full_description}</div>
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/PDF_icon.svg/768px-PDF_icon.svg.png"
             style={{
@@ -87,7 +87,7 @@ const DetailForm = () => {
             }}
             alt="example"
           />
-          <br/>
+          <br />
           <Button icon={<DownloadOutlined />}>Tải xuống</Button>
         </Col>
         <Col span={4}></Col>
@@ -97,7 +97,9 @@ const DetailForm = () => {
               <h4>Mẫu đơn</h4>
             </Col>
             <Col span={6} offset={6}>
-              <Button type="primary" onClick={(e) => handleAutoFill()}>Tự động điền</Button>
+              <Button type="primary" onClick={(e) => handleAutoFill()}>
+                Tự động điền
+              </Button>
             </Col>
           </Row>
           <Form layout="vertical" form={form} onFinish={handleFormSubmit}>
@@ -108,7 +110,7 @@ const DetailForm = () => {
             ))}
             {data1?.fields?.map((item, index) => (
               <Form.Item label={item?.Question} key={index} name={item?.key}>
-                <Question itemData={item}/>
+                <Question itemData={item} />
               </Form.Item>
             ))}
             <Form.Item>
