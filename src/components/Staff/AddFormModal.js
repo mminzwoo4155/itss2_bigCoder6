@@ -5,20 +5,21 @@ import {
   Form,
   Input,
   Modal,
+  notification,
   Radio,
   Row,
   Select,
   Space,
 } from "antd";
 import React from "react";
-import { useState } from "react";
+import { addForm } from "../../firebase/firestore/formStorage";
 
 const AddFormModal = ({ isOpen, setIsOpen }) => {
   const handleClose = () => {
     setIsOpen(false);
   };
   const [form] = Form.useForm();
-  const [count, setCount] = useState([1]);
+  // const [count, setCount] = useState([1]);
 
   const formItemLayout = {
     labelCol: {
@@ -38,21 +39,50 @@ const AddFormModal = ({ isOpen, setIsOpen }) => {
       },
     },
   };
-  const formItemLayoutWithOutLabel = {
-    wrapperCol: {
-      xs: {
-        span: 24,
-        offset: 0,
-      },
-      sm: {
-        span: 20,
-        offset: 4,
-      },
-    },
-  };
-  const onSubmit = (val) => {
-    // console.log("djt me");
-    console.log(val);
+  // const formItemLayoutWithOutLabel = {
+  //   wrapperCol: {
+  //     xs: {
+  //       span: 24,
+  //       offset: 0,
+  //     },
+  //     sm: {
+  //       span: 20,
+  //       offset: 4,
+  //     },
+  //   },
+  // };
+  const onSubmit = async (val) => {
+    try {
+      val.fields.forEach((field, i) => {
+        field.key = `question${i+1}`;
+        switch(field.type){
+          case 'choice': 
+            if(field.options){
+              const newOptions = field.options.map((option, i) => {
+                return {
+                  ...option,
+                  value: i,
+                }
+              });
+              field.options = newOptions;
+            };
+            break;
+          case 'text':
+            delete field.options;
+            break;
+        }
+      });
+      await addForm(val);
+      notification.success({
+        message: 'Thêm đơn thành công',
+      });
+      setIsOpen(false);
+    } catch (error) {
+      notification.error({
+        message: 'Đã có lỗi xảy ra',
+        description: error.message
+      })
+    }
   };
   return (
     <Modal
@@ -63,17 +93,6 @@ const AddFormModal = ({ isOpen, setIsOpen }) => {
       footer={null}
     >
       <Form form={form} onFinish={onSubmit} {...formItemLayout}>
-        {/* {count.map((item, index) => (
-          <Question count={index + 1} />
-        ))}
-
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={() => {
-            setCount([...count, 1]);
-          }}
-        ></Button> */}
         <Form.Item label="Tên form" name="title">
           <Input />
         </Form.Item>
@@ -98,7 +117,6 @@ const AddFormModal = ({ isOpen, setIsOpen }) => {
                     <Form.Item
                       label={`Câu hỏi ${index + 1}`}
                       required={false}
-                      // {...field}
                       name={[field.name, "Question"]}
                     >
                       <Input
@@ -110,7 +128,6 @@ const AddFormModal = ({ isOpen, setIsOpen }) => {
                     </Form.Item>
                     <Form.Item
                       label="Kiểu"
-                      // {...field}
                       name={[field.name, "type"]}
                     >
                       <Radio.Group>
@@ -120,7 +137,7 @@ const AddFormModal = ({ isOpen, setIsOpen }) => {
                     </Form.Item>
                     {/* {form.getFieldValue("fields", field.name, "type")[index]
                       ?.type === "choice" && ( */}
-                    <Form.List name={[field.name, "option"]}>
+                    <Form.List name={[field.name, "options"]}>
                       {(options, { add, remove }, { errors }) => (
                         <>
                           {options.map((option, i) => (
@@ -203,7 +220,7 @@ const AddFormModal = ({ isOpen, setIsOpen }) => {
           >
             Cancel
           </Button>
-          <Button type="primary" htmlType="submit" onClick={handleClose}>
+          <Button type="primary" htmlType="submit">
             Submit
           </Button>
         </Row>

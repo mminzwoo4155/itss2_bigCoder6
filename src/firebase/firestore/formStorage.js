@@ -17,6 +17,14 @@ export const getAllForms = async () => {
   }
 };
 
+export const addForm = async (formData) => {
+  const docData = {
+    src: 'https://dvdn247.net/wp-content/uploads/2019/11/11111.jpg',
+    ...formData
+  };
+  await db.collection('forms').doc().set(docData);
+}
+
 export const getFormById = async (formId) => {
   const docRef = db.collection("forms").doc(`${formId}`);
   try {

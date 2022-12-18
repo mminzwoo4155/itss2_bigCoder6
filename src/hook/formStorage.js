@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
-import { getAllForms } from "../firebase/firestore/formStorage";
+import { db } from "../firebase";
 
 const useFormStorage = () => {
     const [forms, setForms] = useState([]);
 
     useEffect(() => {
-        getForms().catch(console.error);
-    }, []);
+        const unsubcribe = db.collection("forms").onSnapshot((snapshot) => {
+            var snapForms = [];
+            snapshot.docs.forEach((doc) => {
+                snapForms.push({ id: doc.id, ...doc.data() })
+            });
+            setForms(snapForms);
+        })
 
-    const getForms = async () => {
-        const forms = await getAllForms();
-        setForms(forms);
-    }
+        return () => unsubcribe();
+    }, []);
 
     return [forms];
 }
