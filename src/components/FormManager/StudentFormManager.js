@@ -4,9 +4,11 @@ import { Table, Tabs, Tag } from "antd";
 import { EyeOutlined } from "@ant-design/icons";
 import ApproveFormModal from "./ApproveFormModal";
 import useSubmitForm from "../../hook/submitFormStorage";
+import { useAuth } from "../../contexts/AuthContext";
 
 const StudentFormManager = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const { currentUser } = useAuth();
   const [loading, setLoading] = useState(true);
   const [toProcessFormId, setToProcessFormId] = useState("");
   const [currentTab, setCurrentTab] = useState("-1");
@@ -18,10 +20,11 @@ const StudentFormManager = () => {
   const [formData1] = useSubmitForm();
 
   const getTabData = () => {
+    const studentForms = formData1.filter(record => record.student === currentUser.email);
     if(currentTab === "-1"){
-      return { tabData : formData1 }
+      return { tabData : studentForms }
     }
-    const data = formData1.filter(record => record.status.toString() === currentTab);
+    const data = studentForms.filter(record => record.status.toString() === currentTab);
     return { tabData : data }
   };
 
