@@ -6,6 +6,7 @@ import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import {
   getAllSubmittedForm,
   getSubmittedFormByEmail,
+  getAllSubmittedForm_timeStamp_asc,
 } from "../../firebase/firestore/formStorage";
 import { useAuth } from "../../contexts/AuthContext";
 import ApproveFormModal from "./ApproveFormModal";
@@ -15,7 +16,7 @@ const StaffFormManager = () => {
   const [formData, setFormData] = useState([]);
   const [toProcessFormId, setToProcessFormId] = useState('');
   useEffect(() => {
-    const getFormData = getAllSubmittedForm();
+    const getFormData = getAllSubmittedForm_timeStamp_asc();
     getFormData.then((res) => setFormData(res));
   }, []);
   useEffect(() => {
@@ -34,7 +35,7 @@ const StaffFormManager = () => {
     },
     {
       title: "Thời gian tạo đơn",
-      // render: (_, record) => <>{record?.timestamp}</>,
+      render: (_, record) => <>{ new Date(record?.timestamp?.seconds*1000).toLocaleString()}</>,
     },
     {
       title: "Lời nhắn từ hệ thống",

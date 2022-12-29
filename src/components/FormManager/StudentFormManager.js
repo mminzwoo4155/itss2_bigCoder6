@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./index.css";
-import { dataForm } from "./../../mock/formManager";
 import { Table } from "antd";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import { useAuth } from "../../contexts/AuthContext";
@@ -9,6 +8,7 @@ import ApproveFormModal from "./ApproveFormModal";
 import {
   getAllSubmittedForm,
   getSubmittedFormByEmail,
+  getAllSubmittedForm_timeStamp_desc
 } from "../../firebase/firestore/formStorage";
 
 const StudentFormManager = () => {
@@ -17,7 +17,7 @@ const StudentFormManager = () => {
   const [toProcessFormId, setToProcessFormId] = useState("");
 
   useEffect(() => {
-    const getFormData = getAllSubmittedForm();
+    const getFormData = getAllSubmittedForm_timeStamp_desc();
     getFormData.then((res) => setFormData(res));
   }, []);
 
@@ -25,6 +25,7 @@ const StudentFormManager = () => {
     console.log(formData);
   }, [formData]);
 
+  const date = new Date();
   const columns = [
     {
       title: "STT",
@@ -38,7 +39,7 @@ const StudentFormManager = () => {
     },
     {
       title: "Thời gian tạo đơn",
-      // render: (_, record) => <>{record?.timestamp}</>,
+      render: (_, record) => <>{ new Date(record?.timestamp?.seconds*1000).toLocaleString()}</>,
     },
     {
       title: "Lời nhắn từ hệ thống",
