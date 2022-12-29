@@ -7,6 +7,8 @@ const { Meta } = Card;
 
 const FormList = ({ data }) => {
   console.log(data);
+  // console.log("abc", Card);
+
   return (
     <Row justify="space-between" className="form-list" align="bottom">
       {data.map((item, index) => (
@@ -20,8 +22,9 @@ const FormList = ({ data }) => {
                   style={{
                     width: "200px",
                     height: "200px",
+                    border: "1px solid black",
                   }}
-                  src="icon-form.jpg"
+                  src={`${item.logo}`}
                 />
               }
             >
