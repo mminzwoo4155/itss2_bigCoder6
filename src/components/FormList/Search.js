@@ -7,12 +7,12 @@ const Search = ({ query, onchange }) => {
       <Input
         style={{
           borderRadius: "10px",
-          width: "300px",
+          width: "400px",
         }}
         // prefix={<IconSearc}
         className="input is-primary"
         type="text"
-        placeholder="Search here"
+        placeholder="Tìm kiếm ở đây"
         value={query}
         onChange={(e) => onchange(e.currentTarget.value)}
       />
