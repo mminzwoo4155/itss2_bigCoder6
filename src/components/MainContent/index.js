@@ -1,4 +1,4 @@
-import { Col, Dropdown, Pagination, Row, Space, Typography } from "antd";
+import { Button, Col, Dropdown, Pagination, Row, Space, Typography } from "antd";
 import React, { useMemo } from "react";
 import { useState } from "react";
 import Search from "../FormList/Search";
@@ -22,9 +22,29 @@ const queryByItems = [
   }
 ];
 
+const recommendations = [
+  {
+    label: 'Hỗ trợ học phí',
+    category: 'school_fee',
+  },
+  {
+    label: 'Xin chứng nhận học bổng',
+    category: 'scholarship'
+  },
+  {
+    label: 'Tham gia câu lạc bộ',
+    category: 'club',
+  },
+  {
+    label: 'Xin hoãn nghĩa vụ quân sự',
+    category: 'student',
+  }
+]
+
 const MainContent = () => {
   const [query, putQuery] = useState("");
   const [queryBy, putQueryBy] = useState("title");
+  const [recommend, putRecommend] = useState("");
   const [forms] = useFormStorage();
 
   const getData = () => {
@@ -49,6 +69,9 @@ const MainContent = () => {
         default: break;
       }
     }
+    if(recommend){
+      
+    }
     return { displayList: formList };
   };
 
@@ -64,8 +87,7 @@ const MainContent = () => {
   const handleSearch = (query) => {
     putQuery(query);
   };
-  const handleQueryBySelect  = (e) => {
-    console.log(e);
+  const handleQueryBySelect = (e) => {
     putQueryBy(e.key)
   }
   const onChange = (page) => {
@@ -74,7 +96,7 @@ const MainContent = () => {
   return (
     <div className="main-content">
       <div className="title">Danh sách đơn</div>
-      <Row justify="center">
+      <Row justify="center" gutter={[8, 16]}>
         <Col>
           <Search query={query} onchange={handleSearch} />
         </Col>
@@ -94,6 +116,23 @@ const MainContent = () => {
           </Space>
         </Col>
       </Row>
+      <br/>
+      <Row justify="center">
+        <Col>Không biết tìm gì? Hãy chọn 1 ở dưới</Col>
+      </Row>
+      <br/>
+      <Row justify="center">
+        <Col>
+            <Space size={8}>
+              {recommendations.map((item, i) => (
+                <Button key={i} shape="round" onClick={() => putRecommend(item.category)}>
+                  {item.label}
+                </Button>
+              ))}
+            </Space>
+        </Col>
+      </Row>
+      <br/>
       <FormList data={currentDisplayPage} />
       <Pagination
         className="pagination"
