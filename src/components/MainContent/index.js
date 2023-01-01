@@ -5,6 +5,7 @@ import Search from "../FormList/Search";
 import FormList from "../FormList";
 import useFormStorage from "../../hook/formStorage";
 import { DownOutlined } from "@ant-design/icons";
+import { useRecStorage } from "../../hook/recStorage";
 
 const PageSize = 10;
 const queryByItems = [
@@ -22,30 +23,12 @@ const queryByItems = [
   }
 ];
 
-const recommendations = [
-  {
-    label: 'Hỗ trợ học phí',
-    category: 'school_fee',
-  },
-  {
-    label: 'Xin chứng nhận học bổng',
-    category: 'scholarship'
-  },
-  {
-    label: 'Tham gia câu lạc bộ',
-    category: 'club',
-  },
-  {
-    label: 'Xin hoãn nghĩa vụ quân sự',
-    category: 'student',
-  }
-]
-
 const MainContent = () => {
   const [query, putQuery] = useState("");
   const [queryBy, putQueryBy] = useState("title");
   const [recommend, putRecommend] = useState("");
   const [forms] = useFormStorage();
+  const [recommendations] = useRecStorage();
 
   const getData = () => {
     let formList = forms;
@@ -70,7 +53,9 @@ const MainContent = () => {
       }
     }
     if(recommend){
-      
+      formList = formList.filter((form) =>
+        form.recommend? form.recommend.includes(recommend) : false
+      );
     }
     return { displayList: formList };
   };
@@ -89,7 +74,11 @@ const MainContent = () => {
   };
   const handleQueryBySelect = (e) => {
     putQueryBy(e.key)
-  }
+  };
+  const handleRecSelect = (recId) => {
+    console.log(recId);
+    putRecommend(recId);
+  };
   const onChange = (page) => {
     setCurrentPage(page);
   };
@@ -125,7 +114,7 @@ const MainContent = () => {
         <Col>
             <Space size={8}>
               {recommendations.map((item, i) => (
-                <Button key={i} shape="round" onClick={() => putRecommend(item.category)}>
+                <Button key={i} shape="round" onClick={() => handleRecSelect(item.key)}>
                   {item.label}
                 </Button>
               ))}
