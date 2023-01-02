@@ -67,6 +67,7 @@ const DetailForm = () => {
       notification.success({
         message: "Gửi đơn thành công",
       });
+      form.resetFields();
     } catch (error) {
       notification.error({
         message: "Đã có lỗi xảy ra: " + error.message,

@@ -17,7 +17,7 @@ const { Content, Header } = Layout;
 const Homepage = () => {
   const { logout, currentUser, currentProfile } = useAuth();
   const history = useHistory();
-
+  const url = window.location.pathname;
   const handleLogout = async () => {
     try {
       await logout();
@@ -26,7 +26,24 @@ const Homepage = () => {
       console.log("err");
     }
   };
-
+  const defaultMenu = () => {
+    switch (url) {
+      case "/": {
+        return "1";
+      }
+      case "/form-manager": {
+        return "2";
+      }
+      case "/staff": {
+        return "3";
+      }
+      case "/student": {
+        return "3";
+      }
+      default:
+        return "";
+    }
+  };
   return (
     <>
       <Layout>
@@ -35,7 +52,11 @@ const Homepage = () => {
             // src="https://play-lh.googleusercontent.com/lMrBvD9Xr3Lyh6bs1OVDCanvhoZQEu4sWICjbM5amCrMSgHKFjnjfJ4_1iZpGME0L7Y"
             className="logo"
           />
-          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["1"]}>
+          <Menu
+            theme="dark"
+            mode="horizontal"
+            defaultSelectedKeys={[defaultMenu()]}
+          >
             <Menu.Item key="1">
               <Link to="/">Trang chủ</Link>
             </Menu.Item>
