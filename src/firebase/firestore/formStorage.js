@@ -17,10 +17,13 @@ export const getAllForms = async () => {
   }
 };
 
-export const addForm = async (formData) => {
+export const addForm = async (formData, recId) => {
+  const recommends = [];
+  recommends.push(recId);
   const docData = {
     src: 'https://dvdn247.net/wp-content/uploads/2019/11/11111.jpg',
-    ...formData
+    ...formData,
+    recommend: recommends,
   };
   await db.collection('forms').doc().set(docData);
 }
