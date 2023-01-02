@@ -14,14 +14,20 @@ import {
 import React from "react";
 import { addForm } from "../../firebase/firestore/formStorage";
 import { useRecStorage } from "../../hook/recStorage";
+import { useState } from "react";
 
 const AddFormModal = ({ isOpen, setIsOpen }) => {
   const handleClose = () => {
     setIsOpen(false);
   };
+  const [recommend, putRecommend] = useState("");
   const [recommendations] = useRecStorage();
   const [form] = Form.useForm();
   // const [count, setCount] = useState([1]);
+  const handleRecSelect = (recId) => {
+    console.log(recId);
+    putRecommend(recId);
+  };
 
   const formItemLayout = {
     labelCol: {
@@ -74,7 +80,7 @@ const AddFormModal = ({ isOpen, setIsOpen }) => {
             break;
         }
       });
-      await addForm(val);
+      await addForm(val, recommend);
       notification.success({
         message: 'Thêm đơn thành công',
       });
@@ -106,7 +112,21 @@ const AddFormModal = ({ isOpen, setIsOpen }) => {
         </Form.Item>
         {/* <Form.Item label="Thêm gợi lý liên quan" name="recommend">
           <Input.TextArea rows={5} />
-        </Form.Item> */}
+        </Form.Item> */
+        }
+        <Form.Item label="Thêm gợi ý" name="recommend">
+          <Row justify="center">
+            <Col>
+                <Space size={8}>
+                  {recommendations.map((item, i) => (
+                    <Button key={i} shape="round" onClick={() => handleRecSelect(item.key)}>
+                      {item.label}
+                    </Button>
+                  ))}
+                </Space>
+            </Col>
+          </Row> 
+        </Form.Item>
         <div>Thêm câu hỏi</div>
         <Form.List name="fields">
           {(fields, { add, remove }, { errors }) => (
