@@ -42,6 +42,7 @@ const DetailForm = () => {
     getForm.then((res) => {
       setData(res);
     });
+    handleAutoFill();
   }, []);
 
   const [form] = Form.useForm();
@@ -97,9 +98,9 @@ const DetailForm = () => {
               <h4>Mẫu đơn</h4>
             </Col>
             <Col span={6} offset={6}>
-              <Button type="primary" onClick={(e) => handleAutoFill()}>
+              {/* <Button type="primary" onClick={(e) => handleAutoFill()}>
                 Tự động điền
-              </Button>
+              </Button> */}
             </Col>
           </Row>
           <Form layout="vertical" form={form} onFinish={handleFormSubmit}>
