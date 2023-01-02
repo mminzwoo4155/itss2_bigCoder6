@@ -13,11 +13,13 @@ import {
 } from "antd";
 import React from "react";
 import { addForm } from "../../firebase/firestore/formStorage";
+import { useRecStorage } from "../../hook/recStorage";
 
 const AddFormModal = ({ isOpen, setIsOpen }) => {
   const handleClose = () => {
     setIsOpen(false);
   };
+  const [recommendations] = useRecStorage();
   const [form] = Form.useForm();
   // const [count, setCount] = useState([1]);
 
@@ -102,6 +104,9 @@ const AddFormModal = ({ isOpen, setIsOpen }) => {
         <Form.Item label="Mô tả chi tiết" name="full_description">
           <Input.TextArea rows={5} />
         </Form.Item>
+        {/* <Form.Item label="Thêm gợi lý liên quan" name="recommend">
+          <Input.TextArea rows={5} />
+        </Form.Item> */}
         <div>Thêm câu hỏi</div>
         <Form.List name="fields">
           {(fields, { add, remove }, { errors }) => (
