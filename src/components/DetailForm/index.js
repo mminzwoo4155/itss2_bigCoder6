@@ -75,6 +75,19 @@ const DetailForm = () => {
     }
   };
 
+  const handleDownload = () => {
+    try {
+      const url = data1.file;
+      let a = document.createElement('a');
+      a.href = url;
+      a.click();
+    } catch (error) {
+      notification.error({
+        message: "Đã có lỗi xảy ra: " + error.message,
+      });
+    }
+  }
+
   return (
     <div className="">
       <Row>
@@ -90,7 +103,7 @@ const DetailForm = () => {
             alt="example"
           />
           <br />
-          <Button icon={<DownloadOutlined />}>Tải xuống</Button>
+          <Button icon={<DownloadOutlined />} onClick = {handleDownload}>Tải xuống</Button>
         </Col>
         <Col span={4}></Col>
         <Col span={12}>
