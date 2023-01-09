@@ -40,7 +40,7 @@ const StudentFormManager = () => {
     {
       title: "Thời gian tạo đơn",
       render: (_, record) => {
-        const submitDate = new Date(record?.timestamp.seconds);
+        const submitDate = new Date(record?.timestamp.seconds*1000);
         return (
           <>{submitDate.toLocaleString()}</>
         )

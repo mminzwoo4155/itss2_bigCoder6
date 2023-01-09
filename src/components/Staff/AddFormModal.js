@@ -15,12 +15,15 @@ import React from "react";
 import { addForm } from "../../firebase/firestore/formStorage";
 import { useRecStorage } from "../../hook/recStorage";
 import { useState } from "react";
+import UploadFile from "./UploadFile";
+import { storage } from "../../firebase";
 
 const AddFormModal = ({ isOpen, setIsOpen }) => {
   const handleClose = () => {
     setIsOpen(false);
   };
   const [recommend, putRecommend] = useState("");
+  const [file, setFile] = useState("");
   const [recommendations] = useRecStorage();
   const [form] = Form.useForm();
   // const [count, setCount] = useState([1]);
@@ -47,49 +50,42 @@ const AddFormModal = ({ isOpen, setIsOpen }) => {
       },
     },
   };
-  // const formItemLayoutWithOutLabel = {
-  //   wrapperCol: {
-  //     xs: {
-  //       span: 24,
-  //       offset: 0,
-  //     },
-  //     sm: {
-  //       span: 20,
-  //       offset: 4,
-  //     },
-  //   },
-  // };
+
   const onSubmit = async (val) => {
     try {
       val.fields.forEach((field, i) => {
-        field.key = `question${i+1}`;
-        switch(field.type){
-          case 'choice': 
-            if(field.options){
+        field.key = `question${i + 1}`;
+        switch (field.type) {
+          case "choice":
+            if (field.options) {
               const newOptions = field.options.map((option, i) => {
                 return {
                   ...option,
                   value: i,
-                }
+                };
               });
               field.options = newOptions;
-            };
+            }
             break;
-          case 'text':
+          case "text":
             delete field.options;
             break;
         }
       });
-      await addForm(val, recommend);
+      const formValue = {
+        ...val,
+        file: file,
+      };
+      await addForm(formValue, recommend);
       notification.success({
-        message: 'Thêm đơn thành công',
+        message: "Thêm đơn thành công",
       });
       setIsOpen(false);
     } catch (error) {
       notification.error({
-        message: 'Đã có lỗi xảy ra',
-        description: error.message
-      })
+        message: "Đã có lỗi xảy ra",
+        description: error.message,
+      });
     }
   };
   return (
@@ -101,32 +97,60 @@ const AddFormModal = ({ isOpen, setIsOpen }) => {
       footer={null}
     >
       <Form form={form} onFinish={onSubmit} {...formItemLayout}>
-        <Form.Item label="Tên form" name="title">
+        <Form.Item
+          label="Tên form"
+          name="title"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item label="Mô tả ngắn" name="short_description">
+        <Form.Item
+          label="Mô tả ngắn"
+          name="short_description"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item label="Mô tả chi tiết" name="full_description">
+        <Form.Item
+          label="Mô tả chi tiết"
+          name="full_description"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
           <Input.TextArea rows={5} />
         </Form.Item>
         {/* <Form.Item label="Thêm gợi lý liên quan" name="recommend">
           <Input.TextArea rows={5} />
-        </Form.Item> */
-        }
+        </Form.Item> */}
         <Form.Item label="Thêm gợi ý" name="recommend">
           <Row justify="center">
             <Col>
-                <Space size={8}>
-                  {recommendations.map((item, i) => (
-                    <Button key={i} shape="round" onClick={() => handleRecSelect(item.key)}>
-                      {item.label}
-                    </Button>
-                  ))}
-                </Space>
+              <Space size={8}>
+                {recommendations.map((item, i) => (
+                  <Button
+                    key={i}
+                    shape="round"
+                    onClick={() => handleRecSelect(item.key)}
+                  >
+                    {item.label}
+                  </Button>
+                ))}
+              </Space>
             </Col>
-          </Row> 
+          </Row>
         </Form.Item>
+        <UploadFile setFile={setFile} />
         <div>Thêm câu hỏi</div>
         <Form.List name="fields">
           {(fields, { add, remove }, { errors }) => (
@@ -151,10 +175,7 @@ const AddFormModal = ({ isOpen, setIsOpen }) => {
                         }}
                       />
                     </Form.Item>
-                    <Form.Item
-                      label="Kiểu"
-                      name={[field.name, "type"]}
-                    >
+                    <Form.Item label="Kiểu" name={[field.name, "type"]}>
                       <Radio.Group>
                         <Radio value={`choice`}>Choice</Radio>
                         <Radio value={`text`}>Text</Radio>

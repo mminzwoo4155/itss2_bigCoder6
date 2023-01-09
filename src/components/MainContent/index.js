@@ -1,4 +1,12 @@
-import { Button, Col, Dropdown, Pagination, Row, Space, Typography } from "antd";
+import {
+  Button,
+  Col,
+  Dropdown,
+  Pagination,
+  Row,
+  Space,
+  Typography,
+} from "antd";
 import React, { useMemo } from "react";
 import { useState } from "react";
 import Search from "../FormList/Search";
@@ -10,17 +18,17 @@ import { useRecStorage } from "../../hook/recStorage";
 const PageSize = 10;
 const queryByItems = [
   {
-    key: 'title',
-    label: 'Tiêu đề',
+    key: "title",
+    label: "Tiêu đề",
   },
   {
-    key: 'short_des',
-    label: 'Mô tả ngắn',
+    key: "short_des",
+    label: "Mô tả ngắn",
   },
   {
-    key: 'full_des',
-    label: 'Mô tả đầy đủ',
-  }
+    key: "full_des",
+    label: "Mô tả đầy đủ",
+  },
 ];
 
 const MainContent = () => {
@@ -33,30 +41,34 @@ const MainContent = () => {
   const getData = () => {
     let formList = forms;
     if (query) {
-      switch(queryBy){
-        case 'title': 
+      switch (queryBy) {
+        case "title":
           formList = forms.filter((form) =>
             form.title.toLowerCase().match(query.toLowerCase())
           );
           break;
-        case 'short_des':
+        case "short_des":
           formList = forms.filter((form) =>
             form.short_description.toLowerCase().match(query.toLowerCase())
           );
           break;
-        case 'full_des':
+        case "full_des":
           formList = forms.filter((form) =>
             form.full_description.toLowerCase().match(query.toLowerCase())
           );
           break;
-        default: break;
+        default:
+          break;
       }
+    } else {
+      formList = forms;
     }
-    if(recommend){
+    if (recommend) {
       formList = formList.filter((form) =>
-        form.recommend? form.recommend.includes(recommend) : false
+        form.recommend ? form.recommend.includes(recommend) : false
       );
     }
+
     return { displayList: formList };
   };
 
@@ -73,7 +85,7 @@ const MainContent = () => {
     putQuery(query);
   };
   const handleQueryBySelect = (e) => {
-    putQueryBy(e.key)
+    putQueryBy(e.key);
   };
   const handleRecSelect = (recId) => {
     console.log(recId);
@@ -91,37 +103,42 @@ const MainContent = () => {
         </Col>
         <Col offset={1}>
           <Space size={6}>
-          Tìm kiếm theo
-          <Dropdown.Button
-            icon={<DownOutlined/>}
-            menu={{
-              items: queryByItems,
-              selectable: true,
-              defaultSelectedKeys: ['title'],
-              onClick: handleQueryBySelect,
-            }}>
-            {queryByItems.filter(item => item.key === queryBy)[0].label}
-          </Dropdown.Button> 
+            Tìm kiếm theo
+            <Dropdown.Button
+              icon={<DownOutlined />}
+              menu={{
+                items: queryByItems,
+                selectable: true,
+                defaultSelectedKeys: ["title"],
+                onClick: handleQueryBySelect,
+              }}
+            >
+              {queryByItems.filter((item) => item.key === queryBy)[0].label}
+            </Dropdown.Button>
           </Space>
         </Col>
       </Row>
-      <br/>
+      <br />
       <Row justify="center">
         <Col>Không biết tìm gì? Hãy chọn 1 ở dưới</Col>
       </Row>
-      <br/>
+      <br />
       <Row justify="center">
         <Col>
-            <Space size={8}>
-              {recommendations.map((item, i) => (
-                <Button key={i} shape="round" onClick={() => handleRecSelect(item.key)}>
-                  {item.label}
-                </Button>
-              ))}
-            </Space>
+          <Space size={8}>
+            {recommendations.map((item, i) => (
+              <Button
+                key={i}
+                shape="round"
+                onClick={() => handleRecSelect(item.key)}
+              >
+                {item.label}
+              </Button>
+            ))}
+          </Space>
         </Col>
       </Row>
-      <br/>
+      <br />
       <FormList data={currentDisplayPage} />
       <Pagination
         className="pagination"
