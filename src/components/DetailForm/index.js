@@ -83,6 +83,7 @@ const DetailForm = () => {
         message: "Gửi đơn thành công",
       });
       form.resetFields();
+      history.push("/form-manager");
     } catch (error) {
       notification.error({
         message: "Đã có lỗi xảy ra: " + error.message,
@@ -95,8 +96,6 @@ const DetailForm = () => {
   };
 
   const handleApplyForm = () => {
-    console.log(form.getFieldsValue())
-    console.log(preform);
     form.setFieldsValue(preform);
   };
 
@@ -129,8 +128,12 @@ const DetailForm = () => {
               </Form.Item>
             ))}
             {data1?.fields?.map((item, index) => (
-              <Form.Item label={item?.Question} key={index} name={item?.key}>
-                <Question itemData={item} />
+              <Form.Item 
+                label={item?.Question} 
+                key={index} 
+                name={item?.key}
+              >
+                <Question itemData={item}/>
               </Form.Item>
             ))}
             <Form.Item>

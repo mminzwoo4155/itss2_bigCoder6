@@ -9,7 +9,7 @@ const HistoryModal = ({ isOpen, setIsOpen, form, answer, onApplyAndSubmit, onApp
     setIsOpen(false);
   };
   const handleApplyAndSubmit = () => {
-    onApplyAndSubmit();
+    onApplyAndSubmit(answer);
     setIsOpen(false);
   };
 
