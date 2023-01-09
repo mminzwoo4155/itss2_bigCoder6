@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
-import { Button, Form, Col, Row, Input, notification } from "antd";
+import { Button, Form, Col, Row, Input, notification, Space, Checkbox, Modal } from "antd";
 import "./index.css";
 import { DownloadOutlined } from "@ant-design/icons";
 
 import { getFormById, submitForm } from "../../firebase/firestore/formStorage";
 import Question from "./Question";
+import { getHistory, pushHistory } from "../../firebase/firestore/historyStorage";
+import HistoryModal from "./HistoryModal";
 
 const profileArgs = [
   {
@@ -34,6 +36,9 @@ const profileArgs = [
 const DetailForm = () => {
   const history = useHistory();
   const { currentUser, currentProfile } = useAuth();
+  const [save, setSave] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [preform, setPreform] = useState({});
   const id = history.location.pathname.split("/")[2];
   const [data1, setData] = useState({});
 
@@ -41,6 +46,13 @@ const DetailForm = () => {
     const getForm = getFormById(id);
     getForm.then((res) => {
       setData(res);
+    });
+    const getFormHistory = getHistory(currentProfile.id, id);
+    getFormHistory.then((res) => {
+      if(Object.keys(res).length !== 0){
+        setPreform(res);
+        setIsModalOpen(true);
+      };
     });
     handleAutoFill();
   }, []);
@@ -64,15 +76,27 @@ const DetailForm = () => {
   const handleFormSubmit = async (data) => {
     try {
       await submitForm(currentUser.email, id, data);
+      if(save){
+        await pushHistory(currentProfile.id, id, data);
+      }
       notification.success({
         message: "Gửi đơn thành công",
       });
       form.resetFields();
+      history.push("/form-manager");
     } catch (error) {
       notification.error({
         message: "Đã có lỗi xảy ra: " + error.message,
       });
     }
+  };
+
+  const handleHistoryCheckbox = (e) => {
+    setSave(e.target.checked);
+  };
+
+  const handleApplyForm = () => {
+    form.setFieldsValue(preform);
   };
 
   return (
@@ -95,14 +119,7 @@ const DetailForm = () => {
         <Col span={4}></Col>
         <Col span={12}>
           <Row>
-            <Col span={6}>
-              <h4>Mẫu đơn</h4>
-            </Col>
-            <Col span={6} offset={6}>
-              {/* <Button type="primary" onClick={(e) => handleAutoFill()}>
-                Tự động điền
-              </Button> */}
-            </Col>
+            <h4>Mẫu đơn</h4>
           </Row>
           <Form layout="vertical" form={form} onFinish={handleFormSubmit}>
             {profileArgs.map((item) => (
@@ -111,10 +128,20 @@ const DetailForm = () => {
               </Form.Item>
             ))}
             {data1?.fields?.map((item, index) => (
-              <Form.Item label={item?.Question} key={index} name={item?.key}>
-                <Question itemData={item} />
+              <Form.Item 
+                label={item?.Question} 
+                key={index} 
+                name={item?.key}
+              >
+                <Question itemData={item}/>
               </Form.Item>
             ))}
+            <Form.Item>
+              <Space size={4} align="baseline">
+                <p>Bạn có muốn lưu lại form để dùng cho lần sau?</p>
+                <Checkbox onChange={handleHistoryCheckbox} value={save}/>
+              </Space>
+            </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 Gửi
@@ -123,6 +150,14 @@ const DetailForm = () => {
           </Form>
         </Col>
       </Row>
+      <HistoryModal 
+        isOpen={isModalOpen} 
+        setIsOpen={setIsModalOpen} 
+        answer={preform}
+        form={data1}
+        onApplyAndSubmit={handleFormSubmit}
+        onApplyNotSubmit={handleApplyForm}
+      />
     </div>
   );
 };
