@@ -22,11 +22,13 @@ export const submitContribution = async (submitedEmail, text, upload_file) => {
       text: text,
       upload_file: upload_file,
     };
+    console.log(docData);
     await db.collection("contribution").doc().set(docData);
     notification.success({
         message: "Gửi lời góp ý thành công, cảm ơn !",
       });
   } catch (error) {
+    console.log(error);
     notification.error({
       message: "Xảy ra lỗi rồi, hãy thử lại !",
     });

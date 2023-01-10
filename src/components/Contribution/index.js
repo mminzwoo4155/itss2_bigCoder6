@@ -12,7 +12,7 @@ const Contribution = () => {
 
     const onFinish = (values) => {
         console.log(values)
-        submitContribution(currentUser.email, values.text, 'hhhhhh')
+        submitContribution(currentUser.email, values.iken, 'hhhhhh')
       };
     
       const onFinishFailed = (errorInfo) => {
