@@ -1,5 +1,5 @@
 import { Button, Layout, Menu } from "antd";
-import React from "react";
+import React, {useState} from "react";
 
 // import { useState } from "react";
 import "./index.css";
@@ -10,6 +10,7 @@ import MainContent from "../MainContent";
 import DetailForm from "../DetailForm";
 import FormManager from "../FormManager";
 import Profile from "../Profile/Profile";
+import Contribution from "../Contribution";
 import Staff from "../Staff";
 
 const { Content, Header } = Layout;
@@ -26,51 +27,46 @@ const Homepage = () => {
       console.log("err");
     }
   };
-  const defaultMenu = () => {
-    switch (url) {
-      case "/": {
-        return "1";
-      }
-      case "/form-manager": {
-        return "2";
-      }
-      case "/staff": {
-        return "3";
-      }
-      case "/student": {
-        return "3";
-      }
-      default:
-        return "";
-    }
-  };
+  const [current, setCurrent] = useState('1');
+  
+  const items = [
+    {
+      label: <Link to="/">Trang chủ</Link>,
+      key: "1",
+    },
+    {
+      label: <Link to="/form-manager">Quản lý đơn từ</Link>,
+      key: "2",
+    },
+    {
+      label: (
+        <Link to={currentProfile?.role === "staff" ? "/staff" : "student"}>
+          {currentProfile ? currentProfile.role : "N/A"}
+        </Link>
+      ),
+      key: "3",
+    },
+    currentProfile?.role === "student" && {
+      label: (
+        <Link to="/teian">
+          Đóng góp ý kiến
+        </Link>
+      ),
+      key: "4",
+    },
+  ];
   return (
     <>
       <Layout>
         <Header className="header">
-          <div
-            // src="https://play-lh.googleusercontent.com/lMrBvD9Xr3Lyh6bs1OVDCanvhoZQEu4sWICjbM5amCrMSgHKFjnjfJ4_1iZpGME0L7Y"
-            className="logo"
-          />
+          <div className="logo" />
           <Menu
+          onClick={(e) => setCurrent(e.key)}
             theme="dark"
             mode="horizontal"
-            defaultSelectedKeys={[defaultMenu()]}
-          >
-            <Menu.Item key="1">
-              <Link to="/">Trang chủ</Link>
-            </Menu.Item>
-            <Menu.Item key="2">
-              <Link to="/form-manager">Quản lý đơn từ</Link>
-            </Menu.Item>
-            <Menu.Item key="3">
-              <Link
-                to={currentProfile?.role === "staff" ? "/staff" : "student"}
-              >
-                {currentProfile ? currentProfile.role : "N/A"}
-              </Link>
-            </Menu.Item>
-          </Menu>
+            defaultSelectedKeys={[current]}
+            items={items}
+          />
 
           <div className="user-info">
             <div>
@@ -109,6 +105,7 @@ const Homepage = () => {
               <Route path="/form-manager" component={FormManager} />
               <Route path="/profile/:uid" component={Profile} />
               <Route exact path="/staff" component={Staff} />
+              <Route exact path="/teian" component={Contribution} />
             </Switch>
           </Content>
         </Layout>
