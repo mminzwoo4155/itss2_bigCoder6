@@ -10,7 +10,7 @@ const FormList = ({ data }) => {
   // console.log("abc", Card);
 
   return (
-    <Row className="form-list" align="bottom">
+    <Row className="form-list" align="top">
       {data.map((item, index) => (
         <Col span={8} key={index}>
           <Link to={`form/${item.id}`}>

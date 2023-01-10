@@ -1,13 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
-import { Button, Form, Col, Row, Input, notification, Space, Checkbox, Modal } from "antd";
+import {
+  Button,
+  Form,
+  Col,
+  Row,
+  Input,
+  notification,
+  Space,
+  Checkbox,
+  Modal,
+} from "antd";
 import "./index.css";
 import { DownloadOutlined } from "@ant-design/icons";
 
 import { getFormById, submitForm } from "../../firebase/firestore/formStorage";
 import Question from "./Question";
-import { getHistory, pushHistory } from "../../firebase/firestore/historyStorage";
+import {
+  getHistory,
+  pushHistory,
+} from "../../firebase/firestore/historyStorage";
 import HistoryModal from "./HistoryModal";
 
 const profileArgs = [
@@ -47,12 +60,12 @@ const DetailForm = () => {
     getForm.then((res) => {
       setData(res);
     });
-    const getFormHistory = getHistory(currentProfile.id, id);
+    const getFormHistory = getHistory(currentProfile?.id, id);
     getFormHistory.then((res) => {
-      if(Object.keys(res).length !== 0){
+      if (Object.keys(res).length !== 0) {
         setPreform(res);
         setIsModalOpen(true);
-      };
+      }
     });
     handleAutoFill();
   }, []);
@@ -76,7 +89,7 @@ const DetailForm = () => {
   const handleFormSubmit = async (data) => {
     try {
       await submitForm(currentUser.email, id, data);
-      if(save){
+      if (save) {
         await pushHistory(currentProfile.id, id, data);
       }
       notification.success({
@@ -94,7 +107,7 @@ const DetailForm = () => {
   const handleDownload = () => {
     try {
       const url = data1.file;
-      let a = document.createElement('a');
+      let a = document.createElement("a");
       a.href = url;
       a.click();
     } catch (error) {
@@ -102,7 +115,7 @@ const DetailForm = () => {
         message: "Đã có lỗi xảy ra: " + error.message,
       });
     }
-  }
+  };
 
   const handleHistoryCheckbox = (e) => {
     setSave(e.target.checked);
@@ -118,6 +131,8 @@ const DetailForm = () => {
         <Col span={8}>
           <h3>{data1.title}</h3>
           <div className="form-description">{data1.full_description}</div>
+          <br />
+          <br />
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/PDF_icon.svg/768px-PDF_icon.svg.png"
             style={{
@@ -127,7 +142,9 @@ const DetailForm = () => {
             alt="example"
           />
           <br />
-          <Button icon={<DownloadOutlined />} onClick = {handleDownload}>Tải xuống</Button>
+          <Button icon={<DownloadOutlined />} onClick={handleDownload}>
+            Tải xuống
+          </Button>
         </Col>
         <Col span={4}></Col>
         <Col span={12}>
@@ -141,18 +158,14 @@ const DetailForm = () => {
               </Form.Item>
             ))}
             {data1?.fields?.map((item, index) => (
-              <Form.Item 
-                label={item?.Question} 
-                key={index} 
-                name={item?.key}
-              >
-                <Question itemData={item}/>
+              <Form.Item label={item?.Question} key={index} name={item?.key}>
+                <Question itemData={item} />
               </Form.Item>
             ))}
             <Form.Item>
               <Space size={4} align="baseline">
                 <p>Bạn có muốn lưu lại form để dùng cho lần sau?</p>
-                <Checkbox onChange={handleHistoryCheckbox} value={save}/>
+                <Checkbox onChange={handleHistoryCheckbox} value={save} />
               </Space>
             </Form.Item>
             <Form.Item>
@@ -163,9 +176,9 @@ const DetailForm = () => {
           </Form>
         </Col>
       </Row>
-      <HistoryModal 
-        isOpen={isModalOpen} 
-        setIsOpen={setIsModalOpen} 
+      <HistoryModal
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
         answer={preform}
         form={data1}
         onApplyAndSubmit={handleFormSubmit}

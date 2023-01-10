@@ -1,5 +1,5 @@
 import { Button, Layout, Menu } from "antd";
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 // import { useState } from "react";
 import "./index.css";
@@ -19,6 +19,24 @@ const Homepage = () => {
   const { logout, currentUser, currentProfile } = useAuth();
   const history = useHistory();
   const url = window.location.pathname;
+  const defaultMenu = () => {
+    switch (url) {
+      case "/": {
+        return "1";
+      }
+      case "/form-manager": {
+        return "2";
+      }
+      case "/staff": {
+        return "3";
+      }
+      case "/student": {
+        return "3";
+      }
+      default:
+        return "";
+    }
+  };
   const handleLogout = async () => {
     try {
       await logout();
@@ -27,8 +45,7 @@ const Homepage = () => {
       console.log("err");
     }
   };
-  const [current, setCurrent] = useState('1');
-  
+
   const items = [
     {
       label: <Link to="/">Trang chủ</Link>,
@@ -47,11 +64,7 @@ const Homepage = () => {
       key: "3",
     },
     currentProfile?.role === "student" && {
-      label: (
-        <Link to="/teian">
-          Đóng góp ý kiến
-        </Link>
-      ),
+      label: <Link to="/teian">Đóng góp ý kiến</Link>,
       key: "4",
     },
   ];
@@ -61,10 +74,10 @@ const Homepage = () => {
         <Header className="header">
           <div className="logo" />
           <Menu
-          onClick={(e) => setCurrent(e.key)}
+            // onClick={(e) => setCurrent(e.key)}
             theme="dark"
             mode="horizontal"
-            defaultSelectedKeys={[current]}
+            defaultSelectedKeys={[defaultMenu()]}
             items={items}
           />
 
