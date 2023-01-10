@@ -1,26 +1,26 @@
-import React, {useState} from "react";
-import { Button,  Form } from "antd";
+import React, { useState } from "react";
+import { Button, Form } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import "./index.css";
 import { useAuth } from "../../contexts/AuthContext";
 import { message, Upload } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import { submitContribution } from "../../firebase/firestore/contributionStorage";
+import UploadFile from "./../Staff/UploadFile";
 
 const Contribution = () => {
-    const { currentUser,currentProfile } = useAuth();
+  const { currentUser, currentProfile } = useAuth();
+  const [data, setData] = useState();
+  const onFinish = (values) => {
+    console.log(values);
+    submitContribution(currentUser.email, values.iken, data);
+  
+  };
 
-    const onFinish = (values) => {
-        console.log(values)
-        submitContribution(currentUser.email, values.iken, 'hhhhhh')
-      };
-    
-      const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-      };
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
 
-      
-    
   const props = {
     name: "file",
     action: "",
@@ -58,9 +58,7 @@ const Contribution = () => {
       </Form.Item>
 
       <Form.Item label="Ảnh hoặc tài liệu góp ý" name="upload_file">
-        <Upload  name="logo" action="/upload.do">
-          <Button icon={<UploadOutlined />}>Click to Upload</Button>
-        </Upload>
+        <UploadFile setFile={setData}></UploadFile>
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
