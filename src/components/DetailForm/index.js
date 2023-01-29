@@ -3,8 +3,6 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
 import { formContent } from "../../mock/form";
 import { jsPDF } from "jspdf";
-import html2PDF from 'jspdf-html2canvas';
-import { html2pdf } from "html2pdf.js"
 import {
   Button,
   Form,
@@ -111,13 +109,23 @@ const DetailForm = () => {
   const handleDownload = () => {
     let doc = new jsPDF()
     let html = formContent
-    document.head.append(`<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.min.js"></script>`)
     doc.html(html).then(() => doc.save('aaaa.pdf'))
   };
 
   const handlePreview = () => {
-    document.body.innerHTML = formContent
+    document.body.innerHTML = formContent;
+    document.getElementById('name').innerText = `Chứng nhận anh / chị: ${currentProfile?.name}`;
+    document.getElementById('course').innerText = `Là sinh viên đang học tại lớp: ${currentProfile?.course}`;
+    document.getElementById('student-id').innerText = `Số hiệu sinh viên: ${currentProfile?.student_id}`;
+    document.getElementById('year').innerText = `Khoá: ${currentProfile?.year}`;
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    today = dd + '/' + mm + '/' + yyyy;
+    document.getElementById('today').innerText = `Hà Nội, ngày ${today}`
+    let nextYear = dd + '/' + mm + '/' + (yyyy +1)
+    document.getElementById('expire-date').innerText = `Giấy này có giá trị đến ngày ${nextYear}` 
   }
 
   const handleHistoryCheckbox = (e) => {

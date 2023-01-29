@@ -60,11 +60,11 @@ export const formContent = `
         <p style="margin-left: 5%;">
             Hệ đào tạo: Đại học chính quy
         </p>
-        <p style="margin-left: 5%;">
+        <p id="expire-date" style="margin-left: 5%;">
             <em>Giấy này có giá trị đến ngày</em>
         </p>
         <br/>
-        <p align="right" style="padding-right: 20%">
+        <p id="today" align="right" style="padding-right: 20%">
             <em>Hà Nội, ngay 10 thang 10 nam 2020</em>
         </p>
         <p style="margin-left: 5%;">
