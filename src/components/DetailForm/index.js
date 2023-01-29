@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
+import { formContent } from "../../mock/form";
+import { jsPDF } from "jspdf";
+import html2PDF from 'jspdf-html2canvas';
+import { html2pdf } from "html2pdf.js"
 import {
   Button,
   Form,
@@ -13,7 +17,7 @@ import {
   Modal,
 } from "antd";
 import "./index.css";
-import { DownloadOutlined } from "@ant-design/icons";
+import { DownloadOutlined, EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 
 import { getFormById, submitForm } from "../../firebase/firestore/formStorage";
 import Question from "./Question";
@@ -105,17 +109,16 @@ const DetailForm = () => {
   };
 
   const handleDownload = () => {
-    try {
-      const url = data1.file;
-      let a = document.createElement("a");
-      a.href = url;
-      a.click();
-    } catch (error) {
-      notification.error({
-        message: "Đã có lỗi xảy ra: " + error.message,
-      });
-    }
+    let doc = new jsPDF()
+    let html = formContent
+    document.head.append(`<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.min.js"></script>`)
+    doc.html(html).then(() => doc.save('aaaa.pdf'))
   };
+
+  const handlePreview = () => {
+    document.body.innerHTML = formContent
+  }
 
   const handleHistoryCheckbox = (e) => {
     setSave(e.target.checked);
@@ -171,6 +174,9 @@ const DetailForm = () => {
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 Gửi
+              </Button>
+              <Button style={{marginLeft: "5px"}} icon={<EyeOutlined/>} onClick={handlePreview}>
+                Preview
               </Button>
             </Form.Item>
           </Form>
