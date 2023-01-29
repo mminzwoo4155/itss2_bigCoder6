@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
 import { formContent } from "../../mock/form";
-import { jsPDF } from "jspdf";
+import html2canvas from 'html2canvas'
+import jsPdf from 'jspdf'
 import {
   Button,
   Form,
@@ -12,10 +13,9 @@ import {
   notification,
   Space,
   Checkbox,
-  Modal,
 } from "antd";
 import "./index.css";
-import { DownloadOutlined, EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
+import { DownloadOutlined, EyeOutlined } from "@ant-design/icons";
 
 import { getFormById, submitForm } from "../../firebase/firestore/formStorage";
 import Question from "./Question";
@@ -106,10 +106,19 @@ const DetailForm = () => {
     }
   };
 
-  const handleDownload = () => {
-    let doc = new jsPDF()
-    let html = formContent
-    doc.html(html).then(() => doc.save('aaaa.pdf'))
+  const handleDownload = async () => {
+    handlePreview();
+    const domElement = document.getElementById('content');
+    await html2canvas(domElement, {logging: true, letterRenderring: 1, useCORS: true})
+    .then((canvas) => {
+        const width = 625;
+        const height = canvas.height * width / canvas.width;
+        const img = canvas.toDataURL('image/png');
+        const pdf = new jsPdf('portrait', 'pt', 'a4');
+        pdf.addImage(img, 'PNG', 5, 5, width, height);
+        pdf.save('minh.pdf');
+    })
+    history.go(-1);
   };
 
   const handlePreview = () => {
@@ -123,9 +132,9 @@ const DetailForm = () => {
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     today = dd + '/' + mm + '/' + yyyy;
-    document.getElementById('today').innerText = `Hà Nội, ngày ${today}`
-    let nextYear = dd + '/' + mm + '/' + (yyyy +1)
-    document.getElementById('expire-date').innerText = `Giấy này có giá trị đến ngày ${nextYear}` 
+    document.getElementById('today').innerText = `Hà Nội, ngày ${today}`;
+    let nextYear = dd + '/' + mm + '/' + (yyyy +1);
+    document.getElementById('expire-date').innerText = `Giấy này có giá trị đến ngày ${nextYear}`;
   }
 
   const handleHistoryCheckbox = (e) => {

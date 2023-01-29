@@ -1,5 +1,5 @@
 export const formContent = `
-    <div>
+    <div id="content">
         <br/>
         <table width="100%" cellpadding="7" cellspacing="0">
             <colgroup>
@@ -60,6 +60,9 @@ export const formContent = `
         <p style="margin-left: 5%;">
             Hệ đào tạo: Đại học chính quy
         </p>
+        <div id="question">
+        
+        </div>
         <p id="expire-date" style="margin-left: 5%;">
             <em>Giấy này có giá trị đến ngày</em>
         </p>
