@@ -88,8 +88,11 @@ const MainContent = () => {
     putQueryBy(e.key);
   };
   const handleRecSelect = (recId) => {
-    console.log(recId);
-    putRecommend(recId);
+    if (recId === recommend) {
+      putRecommend("");
+    } else {
+      putRecommend(recId);
+    }
   };
   const onChange = (page) => {
     setCurrentPage(page);
@@ -130,6 +133,8 @@ const MainContent = () => {
               <Button
                 key={i}
                 shape="round"
+                // ghost
+                type={recommend === item.key ? "primary" : null}
                 onClick={() => handleRecSelect(item.key)}
               >
                 {item.label}

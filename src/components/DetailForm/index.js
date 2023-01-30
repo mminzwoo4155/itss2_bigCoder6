@@ -22,6 +22,7 @@ import {
   pushHistory,
 } from "../../firebase/firestore/historyStorage";
 import HistoryModal from "./HistoryModal";
+import renderHTML from "react-render-html";
 
 const profileArgs = [
   {
@@ -130,7 +131,9 @@ const DetailForm = () => {
       <Row>
         <Col span={8}>
           <h3>{data1.title}</h3>
-          <div className="form-description">{data1.full_description}</div>
+          <div className="form-description">
+            {renderHTML(data1?.full_description || "<></>")}
+          </div>
           <br />
           <br />
           <img
