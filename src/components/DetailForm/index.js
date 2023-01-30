@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
+import { formContent } from "../../mock/form";
+import html2canvas from 'html2canvas'
+import jsPdf from 'jspdf'
 import {
   Button,
   Form,
@@ -10,10 +13,9 @@ import {
   notification,
   Space,
   Checkbox,
-  Modal,
 } from "antd";
 import "./index.css";
-import { DownloadOutlined } from "@ant-design/icons";
+import { DownloadOutlined, EyeOutlined } from "@ant-design/icons";
 
 import { getFormById, submitForm } from "../../firebase/firestore/formStorage";
 import Question from "./Question";
@@ -104,18 +106,36 @@ const DetailForm = () => {
     }
   };
 
-  const handleDownload = () => {
-    try {
-      const url = data1.file;
-      let a = document.createElement("a");
-      a.href = url;
-      a.click();
-    } catch (error) {
-      notification.error({
-        message: "Đã có lỗi xảy ra: " + error.message,
-      });
-    }
+  const handleDownload = async () => {
+    handlePreview();
+    const domElement = document.getElementById('content');
+    await html2canvas(domElement, {logging: true, letterRenderring: 1, useCORS: true})
+    .then((canvas) => {
+        const width = 625;
+        const height = canvas.height * width / canvas.width;
+        const img = canvas.toDataURL('image/png');
+        const pdf = new jsPdf('portrait', 'pt', 'a4');
+        pdf.addImage(img, 'PNG', 5, 5, width, height);
+        pdf.save('minh.pdf');
+    })
+    history.go(-1);
   };
+
+  const handlePreview = () => {
+    document.body.innerHTML = formContent;
+    document.getElementById('name').innerText = `Chứng nhận anh / chị: ${currentProfile?.name}`;
+    document.getElementById('course').innerText = `Là sinh viên đang học tại lớp: ${currentProfile?.course}`;
+    document.getElementById('student-id').innerText = `Số hiệu sinh viên: ${currentProfile?.student_id}`;
+    document.getElementById('year').innerText = `Khoá: ${currentProfile?.year}`;
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    today = dd + '/' + mm + '/' + yyyy;
+    document.getElementById('today').innerText = `Hà Nội, ngày ${today}`;
+    let nextYear = dd + '/' + mm + '/' + (yyyy +1);
+    document.getElementById('expire-date').innerText = `Giấy này có giá trị đến ngày ${nextYear}`;
+  }
 
   const handleHistoryCheckbox = (e) => {
     setSave(e.target.checked);
@@ -171,6 +191,9 @@ const DetailForm = () => {
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 Gửi
+              </Button>
+              <Button style={{marginLeft: "5px"}} icon={<EyeOutlined/>} onClick={handlePreview}>
+                Preview
               </Button>
             </Form.Item>
           </Form>
