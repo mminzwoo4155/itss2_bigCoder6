@@ -8,3 +8,6 @@
 .form-description {
   white-space: pre-line;
 }
+.ant-card-meta {
+  display: block !important;
+}
