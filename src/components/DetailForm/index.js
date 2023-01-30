@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
 import { formContent } from "../../mock/form";
-import html2canvas from 'html2canvas'
-import jsPdf from 'jspdf'
+import html2canvas from "html2canvas";
+import jsPdf from "jspdf";
 import {
   Button,
   Form,
@@ -57,7 +57,9 @@ const DetailForm = () => {
   const [preform, setPreform] = useState({});
   const id = history.location.pathname.split("/")[2];
   const [data1, setData] = useState({});
-
+  const [storageVal, setStorageVal] = useState(
+    JSON.parse(localStorage.getItem(id))
+  );
   useEffect(() => {
     const getForm = getFormById(id);
     getForm.then((res) => {
@@ -73,70 +75,93 @@ const DetailForm = () => {
     handleAutoFill();
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem(id, JSON.stringify(storageVal));
+  }, [storageVal]);
+
   const [form] = Form.useForm();
 
   const handleAutoFill = () => {
-    try {
-      var values = {};
+    // try {
+    const data = localStorage.getItem(id);
+    const fillData = JSON.parse(data);
+    var values = {};
+    if (currentProfile) {
       profileArgs.forEach((item) => {
         values[item.key] = currentProfile[item.key];
       });
       form.setFieldsValue(values);
-    } catch (error) {
-      notification.error({
-        message: "Điền tự động thất bại. Profile cần được cập nhật",
-      });
     }
+    form.setFieldsValue(fillData);
+    // console.log(profileArgs);
+    // } catch (error) {
+    //   notification.error({
+    //     message: "Điền tự động thất bại. Profile cần được cập nhật",
+    //   });
+    // }
   };
 
-  const handleFormSubmit = async (data) => {
-    try {
-      await submitForm(currentUser.email, id, data);
-      if (save) {
-        await pushHistory(currentProfile.id, id, data);
-      }
-      notification.success({
-        message: "Gửi đơn thành công",
-      });
-      form.resetFields();
-      history.push("/form-manager");
-    } catch (error) {
-      notification.error({
-        message: "Đã có lỗi xảy ra: " + error.message,
-      });
-    }
+  const handleFormSubmit = (data) => {
+    console.log(data);
+    localStorage.setItem(id, JSON.stringify(data));
+    //   try {
+    //     await submitForm(currentUser.email, id, data);
+    //     if (save) {
+    //       await pushHistory(currentProfile.id, id, data);
+    //     }
+    //     notification.success({
+    //       message: "Gửi đơn thành công",
+    //     });
+    //     form.resetFields();
+    //     history.push("/form-manager");
+    //   } catch (error) {
+    //     notification.error({
+    //       message: "Đã có lỗi xảy ra: " + error.message,
+    //     });
+    //   }
   };
 
   const handleDownload = async () => {
     handlePreview();
-    const domElement = document.getElementById('content');
-    await html2canvas(domElement, {logging: true, letterRenderring: 1, useCORS: true})
-    .then((canvas) => {
-        const width = 625;
-        const height = canvas.height * width / canvas.width;
-        const img = canvas.toDataURL('image/png');
-        const pdf = new jsPdf('portrait', 'pt', 'a4');
-        pdf.addImage(img, 'PNG', 5, 5, width, height);
-        pdf.save('minh.pdf');
-    })
+    const domElement = document.getElementById("content");
+    await html2canvas(domElement, {
+      logging: true,
+      letterRenderring: 1,
+      useCORS: true,
+    }).then((canvas) => {
+      const width = 625;
+      const height = (canvas.height * width) / canvas.width;
+      const img = canvas.toDataURL("image/png");
+      const pdf = new jsPdf("portrait", "pt", "a4");
+      pdf.addImage(img, "PNG", 5, 5, width, height);
+      pdf.save("minh.pdf");
+    });
     history.go(-1);
   };
 
   const handlePreview = () => {
     document.body.innerHTML = formContent;
-    document.getElementById('name').innerText = `Chứng nhận anh / chị: ${currentProfile?.name}`;
-    document.getElementById('course').innerText = `Là sinh viên đang học tại lớp: ${currentProfile?.course}`;
-    document.getElementById('student-id').innerText = `Số hiệu sinh viên: ${currentProfile?.student_id}`;
-    document.getElementById('year').innerText = `Khoá: ${currentProfile?.year}`;
+    document.getElementById(
+      "name"
+    ).innerText = `Chứng nhận anh / chị: ${currentProfile?.name}`;
+    document.getElementById(
+      "course"
+    ).innerText = `Là sinh viên đang học tại lớp: ${currentProfile?.course}`;
+    document.getElementById(
+      "student-id"
+    ).innerText = `Số hiệu sinh viên: ${currentProfile?.student_id}`;
+    document.getElementById("year").innerText = `Khoá: ${currentProfile?.year}`;
     var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var dd = String(today.getDate()).padStart(2, "0");
+    var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
     var yyyy = today.getFullYear();
-    today = dd + '/' + mm + '/' + yyyy;
-    document.getElementById('today').innerText = `Hà Nội, ngày ${today}`;
-    let nextYear = dd + '/' + mm + '/' + (yyyy +1);
-    document.getElementById('expire-date').innerText = `Giấy này có giá trị đến ngày ${nextYear}`;
-  }
+    today = dd + "/" + mm + "/" + yyyy;
+    document.getElementById("today").innerText = `Hà Nội, ngày ${today}`;
+    let nextYear = dd + "/" + mm + "/" + (yyyy + 1);
+    document.getElementById(
+      "expire-date"
+    ).innerText = `Giấy này có giá trị đến ngày ${nextYear}`;
+  };
 
   const handleHistoryCheckbox = (e) => {
     setSave(e.target.checked);
@@ -182,7 +207,14 @@ const DetailForm = () => {
             ))}
             {data1?.fields?.map((item, index) => (
               <Form.Item label={item?.Question} key={index} name={item?.key}>
-                <Question itemData={item} />
+                <Question
+                  itemData={item}
+                  onChange={(val) => {
+                    const value = {};
+                    value[item?.key] = val.target.value;
+                    setStorageVal({ ...storageVal, ...value });
+                  }}
+                />
               </Form.Item>
             ))}
             <Form.Item>
@@ -195,7 +227,11 @@ const DetailForm = () => {
               <Button type="primary" htmlType="submit">
                 Gửi
               </Button>
-              <Button style={{marginLeft: "5px"}} icon={<EyeOutlined/>} onClick={handlePreview}>
+              <Button
+                style={{ marginLeft: "5px" }}
+                icon={<EyeOutlined />}
+                onClick={handlePreview}
+              >
                 Preview
               </Button>
             </Form.Item>
