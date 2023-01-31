@@ -129,24 +129,6 @@ const DetailForm = () => {
   }
 
   const handleDownload = async () => {
-    handlePreview();
-    const domElement = document.getElementById("content");
-    await html2canvas(domElement, {
-      logging: true,
-      letterRenderring: 1,
-      useCORS: true,
-    }).then((canvas) => {
-      const width = 625;
-      const height = (canvas.height * width) / canvas.width;
-      const img = canvas.toDataURL("image/png");
-      const pdf = new jsPdf("portrait", "pt", "a4");
-      pdf.addImage(img, "PNG", 5, 5, width, height);
-      pdf.save("minh.pdf");
-    });
-    history.go(-1);
-  };
-
-  const handlePreview = () => {
     document.body.innerHTML = formContent;
     document.getElementById(
       "name"
@@ -168,6 +150,47 @@ const DetailForm = () => {
     document.getElementById(
       "expire-date"
     ).innerText = `Giấy này có giá trị đến ngày ${nextYear}`;
+    const domElement = document.getElementById("content");
+    await html2canvas(domElement, {
+      logging: true,
+      letterRenderring: 1,
+      useCORS: true,
+    }).then((canvas) => {
+      const width = 625;
+      const height = (canvas.height * width) / canvas.width;
+      const img = canvas.toDataURL("image/png");
+      const pdf = new jsPdf("portrait", "pt", "a4");
+      pdf.addImage(img, "PNG", 5, 5, width, height);
+      pdf.save("minh.pdf");
+    });
+    window.location.reload();
+  };
+
+  const handlePreview = () => {
+    var newTab = window.open('', '_blank');
+    newTab.document.write('<title>Preview</title>')
+    newTab.document.write(formContent);
+    newTab.document.getElementById(
+      "name"
+    ).innerText = `Chứng nhận anh / chị: ${currentProfile?.name}`;
+    newTab.document.getElementById(
+      "course"
+    ).innerText = `Là sinh viên đang học tại lớp: ${currentProfile?.course}`;
+    newTab.document.getElementById(
+      "student-id"
+    ).innerText = `Số hiệu sinh viên: ${currentProfile?.student_id}`;
+    newTab.document.getElementById("year").innerText = `Khoá: ${currentProfile?.year}`;
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, "0");
+    var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+    var yyyy = today.getFullYear();
+    today = dd + "/" + mm + "/" + yyyy;
+    newTab.document.getElementById("today").innerText = `Hà Nội, ngày ${today}`;
+    let nextYear = dd + "/" + mm + "/" + (yyyy + 1);
+    newTab.document.getElementById(
+      "expire-date"
+    ).innerText = `Giấy này có giá trị đến ngày ${nextYear}`;
+    newTab.document.close();
   };
 
   const handleHistoryCheckbox = (e) => {
