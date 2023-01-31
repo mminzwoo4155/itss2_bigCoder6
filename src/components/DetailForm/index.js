@@ -25,6 +25,7 @@ import {
 } from "../../firebase/firestore/historyStorage";
 import HistoryModal from "./HistoryModal";
 import renderHTML from "react-render-html";
+import UploadFile from "../Staff/UploadFile";
 
 const profileArgs = [
   {
@@ -60,6 +61,7 @@ const DetailForm = () => {
   const [storageVal, setStorageVal] = useState(
     JSON.parse(localStorage.getItem(id))
   );
+  const [uploadFile, setUploadFile] = useState();
   useEffect(() => {
     const getForm = getFormById(id);
     getForm.then((res) => {
@@ -101,25 +103,30 @@ const DetailForm = () => {
     // }
   };
 
-  const handleFormSubmit = (data) => {
-    console.log(data);
-    localStorage.setItem(id, JSON.stringify(data));
-    //   try {
-    //     await submitForm(currentUser.email, id, data);
-    //     if (save) {
-    //       await pushHistory(currentProfile.id, id, data);
-    //     }
-    //     notification.success({
-    //       message: "Gửi đơn thành công",
-    //     });
-    //     form.resetFields();
-    //     history.push("/form-manager");
-    //   } catch (error) {
-    //     notification.error({
-    //       message: "Đã có lỗi xảy ra: " + error.message,
-    //     });
-    //   }
+  const handleFormSubmit = async (data) => {
+    // console.log(data);
+    // localStorage.setItem(id, JSON.stringify(data));
+    try {
+      await submitForm(currentUser.email, id, data);
+      if (save) {
+        await pushHistory(currentProfile.id, id, data);
+      }
+      notification.success({
+        message: "Gửi đơn thành công",
+      });
+      form.resetFields();
+      history.push("/form-manager");
+    } catch (error) {
+      notification.error({
+        message: "Đã có lỗi xảy ra: " + error.message,
+      });
+    }
   };
+
+  const handleCache = () => {
+    const data = form.getFieldsValue();
+    localStorage.setItem(id, JSON.stringify(data));
+  }
 
   const handleDownload = async () => {
     handlePreview();
@@ -217,6 +224,7 @@ const DetailForm = () => {
                 />
               </Form.Item>
             ))}
+            <UploadFile setFile={setUploadFile}></UploadFile>
             <Form.Item>
               <Space size={4} align="baseline">
                 <p>Bạn có muốn lưu lại form để dùng cho lần sau?</p>
@@ -232,7 +240,13 @@ const DetailForm = () => {
                 icon={<EyeOutlined />}
                 onClick={handlePreview}
               >
-                Preview
+                Xem trước
+              </Button>
+              <Button
+                style={{marginLeft: "5px"}}
+                onClick={handleCache}
+              >
+                Tạm lưu
               </Button>
             </Form.Item>
           </Form>
