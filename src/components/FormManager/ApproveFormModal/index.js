@@ -92,10 +92,10 @@ const ApproveFormModal = ({ isOpen, setIsOpen, id, getData }) => {
                   Duyệt
                 </Button>,
               ]
-            : // : [<Button key={1} danger ghost onClick={handleCancel}>
-              //   Từ chối
-              // </Button>]
-              false
+            : [<Button key={1} danger ghost onClick={handleCancel}>
+                Từ chối
+              </Button>]
+              // false
           : false
       }
     >
