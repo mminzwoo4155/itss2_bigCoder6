@@ -130,9 +130,10 @@ const DetailForm = () => {
 
   const handleDownload = async () => {
     document.body.innerHTML = formContent;
+    document.getElementById('form-title').innerHTML = `<b>${data1?.title.toUpperCase()}</b>`;
     document.getElementById(
       "name"
-    ).innerText = `Chứng nhận anh / chị: ${currentProfile?.name}`;
+    ).innerText = `Tên sinh viên: ${currentProfile?.name}`;
     document.getElementById(
       "course"
     ).innerText = `Là sinh viên đang học tại lớp: ${currentProfile?.course}`;
@@ -150,6 +151,23 @@ const DetailForm = () => {
     document.getElementById(
       "expire-date"
     ).innerText = `Giấy này có giá trị đến ngày ${nextYear}`;
+    let divElement = document.getElementById('question');
+    const questions = data1?.fields;
+    questions.forEach(item => {
+      switch (item.type) {
+        case 'choice':
+          const answer = item.options.find((option) =>
+            option.value.toString() === storageVal[item.key].toString()
+          );
+          return (
+            divElement.innerHTML += `<p style="margin-left: 5%;">${item.Question}: ${answer.label}</p>`
+          );
+        case 'text':
+          return (divElement.innerHTML += `<p style="margin-left: 5%;">${item.Question}: ${storageVal[item.key]}</p>`);
+        default:
+          return;
+      }
+    })
     const domElement = document.getElementById("content");
     await html2canvas(domElement, {
       logging: true,
@@ -170,9 +188,10 @@ const DetailForm = () => {
     var newTab = window.open('', '_blank');
     newTab.document.write('<title>Preview</title>')
     newTab.document.write(formContent);
+    newTab.document.getElementById('form-title').innerHTML = `<b>${data1?.title.toUpperCase()}</b>`;
     newTab.document.getElementById(
       "name"
-    ).innerText = `Chứng nhận anh / chị: ${currentProfile?.name}`;
+    ).innerText = `Tên sinh viên: ${currentProfile?.name}`;
     newTab.document.getElementById(
       "course"
     ).innerText = `Là sinh viên đang học tại lớp: ${currentProfile?.course}`;
@@ -190,6 +209,23 @@ const DetailForm = () => {
     newTab.document.getElementById(
       "expire-date"
     ).innerText = `Giấy này có giá trị đến ngày ${nextYear}`;
+    let divElement = newTab.document.getElementById('question');
+    const questions = data1?.fields;
+    questions.forEach(item => {
+      switch (item.type) {
+        case 'choice':
+          const answer = item.options.find((option) =>
+            option.value.toString() === storageVal[item.key].toString()
+          );
+          return (
+            divElement.innerHTML += `<p style="margin-left: 5%;">${item.Question}: ${answer.label}</p>`
+          );
+        case 'text':
+          return (divElement.innerHTML += `<p style="margin-left: 5%;">${item.Question}: ${storageVal[item.key]}</p>`);
+        default:
+          return;
+      }
+    })
     newTab.document.close();
   };
 
@@ -266,7 +302,7 @@ const DetailForm = () => {
                 Xem trước
               </Button>
               <Button
-                style={{marginLeft: "5px"}}
+                style={{ marginLeft: "5px" }}
                 onClick={handleCache}
               >
                 Tạm lưu
