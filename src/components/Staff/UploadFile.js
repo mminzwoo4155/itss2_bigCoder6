@@ -11,7 +11,7 @@ const UploadFile = ({ setFile }) => {
   //   };
   return (
     // <Form layout="inline">
-    <Form.Item label="Upload file PDF">
+    <Form.Item label="Tải lên PDF">
       <Input
         type="file"
         accept="application/pdf,application/vnd.ms-excel"

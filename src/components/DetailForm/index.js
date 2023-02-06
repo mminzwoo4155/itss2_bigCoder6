@@ -301,12 +301,12 @@ const DetailForm = () => {
               >
                 Xem trước
               </Button>
-              <Button
+              {/* <Button
                 style={{ marginLeft: "5px" }}
                 onClick={handleCache}
               >
                 Tạm lưu
-              </Button>
+              </Button> */}
             </Form.Item>
           </Form>
         </Col>
