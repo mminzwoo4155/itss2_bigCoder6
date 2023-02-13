@@ -31,7 +31,7 @@ const Profile = () => {
             </div>
             <div className="profile-name">
               <h3>
-                <b>名前</b>: {currentProfile?.name || "N/A"}
+                <b>Tên</b>: {currentProfile?.name || "N/A"}
               </h3>
             </div>
           </div>

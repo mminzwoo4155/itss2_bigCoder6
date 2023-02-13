@@ -57,7 +57,7 @@ const Homepage = () => {
     },
     {
       label: (
-        <Link to={currentProfile?.role === "staff" ? "/staff" : "student"}>
+        <Link to={currentProfile?.role === "staff" ? "/staff" : "/"}>
           {currentProfile ? currentProfile.role : "N/A"}
         </Link>
       ),
